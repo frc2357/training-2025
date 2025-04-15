@@ -1,0 +1,11 @@
+{
+  "name": "training-2025",
+  "scripts": {
+    "format": "prettier --write **/*.java",
+    "check": "prettier --check **/*.java"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "prettier-plugin-java": "^2.6.7"
+  }
+}
