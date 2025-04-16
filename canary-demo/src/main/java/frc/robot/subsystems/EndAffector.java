@@ -27,54 +27,56 @@ public class EndAffector extends SubsystemBase {
   private Debouncer m_debouncer;
 
   public EndAffector() {
-    m_motor = new SparkMax(CAN_ID.END_AFFECTOR_MOTOR_ID, MotorType.kBrushed);
+    // m_motor = new SparkMax(CAN_ID.END_AFFECTOR_MOTOR_ID, MotorType.kBrushed);
 
-    m_proximitySensor = new DigitalInput(DIGITAL_INPUT.END_AFFECTOR_PROXIMITY_SENSOR_ID);
-    m_proximitySensorPower =
-        new DigitalOutput(DIGITAL_INPUT.END_AFFECTOR_PROXIMITY_SENSOR_POWER_ID);
+    // m_proximitySensor = new DigitalInput(DIGITAL_INPUT.END_AFFECTOR_PROXIMITY_SENSOR_ID);
+    // m_proximitySensorPower =
+    //     new DigitalOutput(DIGITAL_INPUT.END_AFFECTOR_PROXIMITY_SENSOR_POWER_ID);
 
-    m_debouncer = new Debouncer(END_AFFECTOR.DEBOUNCE_TIME_SECONDS, DebounceType.kBoth);
+    // m_debouncer = new Debouncer(END_AFFECTOR.DEBOUNCE_TIME_SECONDS, DebounceType.kBoth);
 
-    configure();
+    // configure();
   }
 
   private void configure() {
-    SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(END_AFFECTOR.IS_INVERTED).idleMode(END_AFFECTOR.IDLE_MODE).smartCurrentLimit(END_AFFECTOR.MOTOR_STALL_LIMIT_AMPS, END_AFFECTOR.MOTOR_FREE_LIMIT_AMPS).voltageCompensation(12);
-    m_motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    // SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(END_AFFECTOR.IS_INVERTED).idleMode(END_AFFECTOR.IDLE_MODE).smartCurrentLimit(END_AFFECTOR.MOTOR_STALL_LIMIT_AMPS, END_AFFECTOR.MOTOR_FREE_LIMIT_AMPS).voltageCompensation(12);
+    // m_motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   public void setAxisSpeed(double axisSpeed) {
-    double motorSpeed = (-axisSpeed) * END_AFFECTOR.AXIS_MAX_SPEED;
-    m_motor.set(motorSpeed);
+    // double motorSpeed = (-axisSpeed) * END_AFFECTOR.AXIS_MAX_SPEED;
+    // m_motor.set(motorSpeed);
   }
 
   public void setSpeed(double speedPercentOut) {
-    m_motor.set(speedPercentOut);
+    // m_motor.set(speedPercentOut);
   }
 
   public void setVoltage(double outputVoltage) {
-    m_motor.setVoltage(outputVoltage);
+    // m_motor.setVoltage(outputVoltage);
   }
 
   public boolean getProximitySensor() {
+    return false;
     // return m_debouncer.calculate(!m_proximitySensor.get());
-    return !m_proximitySensor.get();
+    // return !m_proximitySensor.get();
   }
 
   public void setProximitySensorPower(boolean on) {
-    m_proximitySensorPower.set(on);
+    // m_proximitySensorPower.set(on);
   }
 
   public void stop() {
-    m_motor.stopMotor();
+    // m_motor.stopMotor();
   }
 
   public double getMotorAmperage() {
-    return m_motor.getOutputCurrent();
+    return 0;
+    // return m_motor.getOutputCurrent();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("End Affector Running", m_motor.get() >= 0.1);
+    // SmartDashboard.putBoolean("End Affector Running", m_motor.get() >= 0.1);
   }
 }

@@ -4,31 +4,22 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
-import frc.robot.commands.LEDs.LEDsSetIdle;
-import frc.robot.commands.climber.ManualLineUpTrap;
-import frc.robot.commands.drive.TargetLockForFeeding;
-import frc.robot.commands.drive.TargetLockOnSpeaker;
-import frc.robot.commands.intake.CancelIntakeOnEnd;
-import frc.robot.commands.intake.IntakeFeedToShooter;
-import frc.robot.commands.pickup.VisionPickup;
-import frc.robot.commands.scoring.AmpSequence;
-import frc.robot.commands.scoring.VisionTargeting;
-import frc.robot.commands.scoring.VisionlessShooting;
+import frc.robot.commands.intake.IntakeRepositionNote;
+import frc.robot.commands.intake.Pickup;
 import frc.robot.commands.scoring.VisionlessShootingWithFeeding;
-import frc.robot.commands.shooter.ShooterWaitForRPM;
-import frc.robot.commands.source.SourceIntakeFromShooter;
 import frc.robot.controls.util.AxisInterface;
 import frc.robot.controls.util.AxisThresholdTrigger;
 import frc.robot.controls.util.RumbleInterface;
 
 public class DriverControls implements RumbleInterface {
+  private double m_shooterRPMSetpoint = 2000;
+
   private XboxController m_controller;
   private double m_deadband;
 
@@ -52,6 +43,8 @@ public class DriverControls implements RumbleInterface {
   private POVButton m_leftDPad;
 
   public DriverControls(XboxController controller, double deadband) {
+    SmartDashboard.putNumber("Shooter RPM Setpoint", m_shooterRPMSetpoint);
+
     m_controller = controller;
     m_deadband = deadband;
 
@@ -98,53 +91,56 @@ public class DriverControls implements RumbleInterface {
 
     Trigger notClimbing = isClimbing.negate();
 
-    m_aButton
-        .and(notClimbing)
-        .whileTrue(
-            new VisionlessShootingWithFeeding(Robot.shooterCurve[1][2], Robot.shooterCurve[1][1]));
-    m_bButton.whileTrue(
-        new VisionlessShootingWithFeeding(Robot.shooterCurve[4][2], Robot.shooterCurve[4][1]));
+    // m_aButton
+    //     .and(notClimbing)
+    //     .whileTrue(
+    //         new VisionlessShootingWithFeeding(Robot.shooterCurve[1][2], Robot.shooterCurve[1][1]));
+    // m_bButton.whileTrue(
+    //     new VisionlessShootingWithFeeding(Robot.shooterCurve[4][2], Robot.shooterCurve[4][1]));
 
-    m_leftTrigger.and(notClimbing).onTrue(new VisionPickup());
-    m_leftTrigger.and(notClimbing).toggleOnFalse(new CancelIntakeOnEnd());
+    // m_leftTrigger.and(notClimbing).onTrue(new VisionPickup());
+    // m_leftTrigger.and(notClimbing).toggleOnFalse(new CancelIntakeOnEnd());
 
-    m_leftBumper.whileTrue(
-        new ParallelCommandGroup(new TargetLockForFeeding(), new VisionlessShooting(3650, 38)));
-    m_leftBumper
-        .and(m_rightTriggerShoot)
-        .and(notClimbing)
-        .whileTrue(
-            new SequentialCommandGroup(
-                new ShooterWaitForRPM(), new IntakeFeedToShooter().withTimeout(0.25)));
+    // m_leftBumper.whileTrue(
+    //     new ParallelCommandGroup(new TargetLockForFeeding(), new VisionlessShooting(3650, 38)));
+    // m_leftBumper
+    //     .and(m_rightTriggerShoot)
+    //     .and(notClimbing)
+    //     .whileTrue(
+    //         new SequentialCommandGroup(
+    //             new ShooterWaitForRPM(), new IntakeFeedToShooter().withTimeout(0.25)));
 
-    m_yButton.onTrue(
-        new ManualLineUpTrap(m_yButton, m_aButton.and(isClimbing))
-            .finallyDo(
-                () -> {
-                  Robot.state.setClimbing(false);
-                }));
+    // m_yButton.onTrue(
+    //     new ManualLineUpTrap(m_yButton, m_aButton.and(isClimbing))
+    //         .finallyDo(
+    //             () -> {
+    //               Robot.state.setClimbing(false);
+    //             }));
 
-    m_xButton.whileTrue(new SourceIntakeFromShooter());
+    // m_xButton.whileTrue(new SourceIntakeFromShooter());
 
-    // scoring
-    m_rightBumper.onTrue(new AmpSequence(m_rightBumper));
+    // // scoring
+    // m_rightBumper.onTrue(new AmpSequence(m_rightBumper));
 
     m_backButton.onTrue(new InstantCommand(() -> Robot.swerve.zeroGyro(false)));
     m_startButton.onTrue(new InstantCommand(() -> Robot.swerve.zeroGyro(true)));
 
-    m_rightTriggerPrime
-        .and(noLeftBumper)
-        .and(notClimbing)
-        .whileTrue(
-            new ParallelCommandGroup(new VisionTargeting(4000, true), new TargetLockOnSpeaker()));
-    m_rightTriggerShoot
-        .and(noLeftBumper)
-        .and(notClimbing)
-        .whileTrue(
-            new SequentialCommandGroup(
-                new ShooterWaitForRPM().withTimeout(1.5),
-                new IntakeFeedToShooter(),
-                new LEDsSetIdle()));
+    // m_rightTriggerPrime
+    //     .and(noLeftBumper)
+    //     .and(notClimbing)
+    //     .whileTrue(
+    //         new ParallelCommandGroup(new VisionTargeting(4000, true), new TargetLockOnSpeaker()));
+    // m_rightTriggerShoot
+    //     .and(noLeftBumper)
+    //     .and(notClimbing)
+    //     .whileTrue(
+    //         new SequentialCommandGroup(
+    //             new ShooterWaitForRPM().withTimeout(1.5),
+    //             new IntakeFeedToShooter(),
+    //             new LEDsSetIdle()));
+
+    m_leftTrigger.whileTrue(new Pickup().andThen(new IntakeRepositionNote()));
+    m_rightTriggerPrime.whileTrue(new VisionlessShootingWithFeeding(2000, 55));
   }
 
   public double getX() {
@@ -197,6 +193,11 @@ public class DriverControls implements RumbleInterface {
     // value = Math.copySign(Math.pow(value,
     // Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
     return value;
+  }
+
+
+  public void updateShooterRPMSetpoint() {
+    m_shooterRPMSetpoint = SmartDashboard.getNumber("Shooter RPM Setpoint", 2000);
   }
   
 

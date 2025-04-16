@@ -41,7 +41,7 @@ public class SourceSide3NoteNoStage extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("SourceSide4Note2NoStage", 0, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),
@@ -56,7 +56,7 @@ public class SourceSide3NoteNoStage extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("SourceSide4Note3NoStage", 0, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new TargetLockOnSpeaker(true).withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new ShooterWaitForRPM(),
                 new IntakeFeedToShooter().withTimeout(0.2)),

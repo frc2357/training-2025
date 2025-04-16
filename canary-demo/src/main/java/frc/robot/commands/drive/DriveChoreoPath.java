@@ -3,7 +3,6 @@ package frc.robot.commands.drive;
 import choreo.Choreo;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoTrajectory;
-import choreo.auto.AutoFactory.AutoBindings;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import choreo.trajectory.TrajectorySample;
@@ -22,24 +21,25 @@ public class DriveChoreoPath extends SequentialCommandGroup {
   private Pose2d m_startingPose; // The starting pose of the robot
   private boolean m_targetLock; // Whether or not this specific path should target lock or not
   private int m_splitIndex;
-  private final AutoFactory m_autoFactory =
-   Choreo.createAutoFactory(Robot.swerve, 
-   () -> Robot.swerve.getPose(), 
-   (Pose2d pose, SwerveSample sample) -> choreoController(pose, sample), 
-   CHOREO.CHOREO_AUTO_MIRROR_PATHS, new AutoBindings()); // The choreo auto factory to do all the stuff
+  private final AutoFactory m_autoFactory = null;
+  //  Choreo.createAutoFactory(Robot.swerve, 
+  //  () -> Robot.swerve.getPose(), 
+  //  (Pose2d pose, SwerveSample sample) -> choreoController(pose, sample), 
+  //  CHOREO.CHOREO_AUTO_MIRROR_PATHS, new AutoBindings()); // The choreo auto factory to do all the stuff
 
   private void choreoController(Pose2d curPose, SwerveSample sample){
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(
-            CHOREO.X_CONTROLLER.calculate(curPose.getX(), sample.x) + sample.vx,
-            CHOREO.Y_CONTROLLER.calculate(curPose.getY(), sample.y) + sample.vy,
-            CHOREO.ROTATION_CONTROLLER.calculate(curPose.getRotation().getRadians(), sample.heading) + sample.omega
-        ), curPose.getRotation());
-    if(m_targetLock){
-      Robot.swerve.autonDriveWithTargetLock(speeds);
-    }else{
-      Robot.swerve.autonDriveWithFeedForward(speeds);
-    }
+    System.out.println("DriveChoreoPath.choreoController has been commented out");
+    // ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+    //     new ChassisSpeeds(
+    //         CHOREO.X_CONTROLLER.calculate(curPose.getX(), sample.x) + sample.vx,
+    //         CHOREO.Y_CONTROLLER.calculate(curPose.getY(), sample.y) + sample.vy,
+    //         CHOREO.ROTATION_CONTROLLER.calculate(curPose.getRotation().getRadians(), sample.heading) + sample.omega
+    //     ), curPose.getRotation());
+    // if(m_targetLock){
+    //   Robot.swerve.autonDriveWithTargetLock(speeds);
+    // }else{
+    //   Robot.swerve.autonDriveWithFeedForward(speeds);
+    // }
   }
   
   /**
@@ -86,54 +86,58 @@ public class DriveChoreoPath extends SequentialCommandGroup {
   @SuppressWarnings("unchecked")
   public DriveChoreoPath(
       String trajectoryFileName, int splitIndex, boolean setPoseToStartTrajectory, boolean targetLock) {
-    m_targetLock = targetLock;
-    m_splitIndex = splitIndex;
-    m_pathName = trajectoryFileName.split(".")[0];// removes anything that could messup the code.
-    m_traj = ((Trajectory<SwerveSample>) Choreo.loadTrajectory(trajectoryFileName).orElseThrow()); // Loads choreo file into trajctory object
-    addCommands(
-        new InstantCommand(
-          () -> {
-            m_startingState = CHOREO.CHOREO_AUTO_MIRROR_PATHS.getAsBoolean()
-            ? m_traj.getInitialSample().flipped() // The starting stuff is flipped if we are on the red alliance
-            : m_traj.getInitialSample();
-            m_startingPose = m_startingState.getPose();
-          }
-        ));
+        System.out.println("DriveChoreoPath constructor has been commented out");
+    // m_targetLock = targetLock;
+    // m_splitIndex = splitIndex;
+    // m_pathName = trajectoryFileName.split(".")[0];// removes anything that could messup the code.
+    // m_traj = ((Trajectory<SwerveSample>) Choreo.loadTrajectory(trajectoryFileName).orElseThrow()); // Loads choreo file into trajctory object
+    // addCommands(
+    //     new InstantCommand(
+    //       () -> {
+    //         m_startingState = CHOREO.CHOREO_AUTO_MIRROR_PATHS.getAsBoolean()
+    //         ? m_traj.getInitialSample().flipped() // The starting stuff is flipped if we are on the red alliance
+    //         : m_traj.getInitialSample();
+    //         m_startingPose = m_startingState.getPose();
+    //       }
+    //     ));
 
-    // Set the gyro yaw to 0 and the pose x, y to the starting position of the path
-    if (setPoseToStartTrajectory) {
-      addCommands(new InstantCommand(() -> Robot.swerve.setPose(m_startingPose)));
-    }
+    // // Set the gyro yaw to 0 and the pose x, y to the starting position of the path
+    // if (setPoseToStartTrajectory) {
+    //   addCommands(new InstantCommand(() -> Robot.swerve.setPose(m_startingPose)));
+    // }
 
-    addCommands(
-        // Set the drive velocity x, y and angular velocity to the starting state's
-        // number
-        // This should help the wheels "straighten" up before starting the path
-        new InstantCommand(
-            () ->
-                Robot.swerve.driveFieldRelative(
-                    m_startingState.getChassisSpeeds().vxMetersPerSecond,
-                    m_startingState.getChassisSpeeds().vyMetersPerSecond,
-                    m_startingState.getChassisSpeeds().omegaRadiansPerSecond))
-    );
+    // addCommands(
+    //     // Set the drive velocity x, y and angular velocity to the starting state's
+    //     // number
+    //     // This should help the wheels "straighten" up before starting the path
+    //     new InstantCommand(
+    //         () ->
+    //             Robot.swerve.driveFieldRelative(
+    //                 m_startingState.getChassisSpeeds().vxMetersPerSecond,
+    //                 m_startingState.getChassisSpeeds().vyMetersPerSecond,
+    //                 m_startingState.getChassisSpeeds().omegaRadiansPerSecond))
+    // );
   }
 
   /**
    * This runs the path with no triggers, and should allow use of the triggers API in other sections of the path.
    */
   public void noTriggers(){
-    addCommands( 
-      new InstantCommand(
-        () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)),
-        m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.voidLoop()).cmd()
-    );//this should run it in a
+    System.out.println("DriveChoreoPath.noTriggers has been commented out");
+    // addCommands( 
+    //   new InstantCommand(
+    //     () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)),
+    //     m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.voidLoop()).cmd()
+    // );//this should run it in a
   //compatible way, so we can choose to use the trigger API for some sections, and not for others in a single path.
   }
 
   public AutoTrajectory withTriggers(){
-    addCommands(new InstantCommand(
-        () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)));
-    return m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.newLoop(m_pathName));
+    System.out.println("DriveChoreoPath.withTriggers has been commented out");
+    return null;
+    // addCommands(new InstantCommand(
+    //     () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)));
+    // return m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.newLoop(m_pathName));
   }
 
   @Override

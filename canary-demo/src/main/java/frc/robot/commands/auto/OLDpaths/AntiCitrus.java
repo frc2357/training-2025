@@ -34,7 +34,7 @@ public class AntiCitrus extends SequentialCommandGroup {
         // Drive back with note 2 and shoot
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new DriveChoreoPath("AntiCitrus2", 0, false).deadlineWith(new AutoPickup()),
+                new DriveChoreoPath("AntiCitrus2", 0, false).deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(1.5),
                 new IntakeFeedToShooter().withTimeout(1)),

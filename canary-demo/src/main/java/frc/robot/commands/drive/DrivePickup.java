@@ -2,7 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CompSwerveTunerConstants;
+import frc.robot.TunerConstants;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Constants.SWERVE;
@@ -16,9 +16,9 @@ public class DrivePickup extends Command {
   private boolean m_gotIt;
 
   public DrivePickup() {
-    m_startingPipeline = Robot.intakeCam.getPipeline();
+    // m_startingPipeline = Robot.intakeCam.getPipeline();
     m_yawController = SWERVE.VISION_X_TRANSLATION_PID_CONTROLLER;
-    addRequirements(Robot.swerve, Robot.intakeCam);
+    // addRequirements(Robot.swerve, Robot.intakeCam);
   }
 
   @Override
@@ -32,26 +32,26 @@ public class DrivePickup extends Command {
 
   @Override
   public void execute() {
-    double targetYaw = Robot.intakeCam.getNoteTargetYaw();
-    double targetPitch = Robot.intakeCam.getNoteTargetPitch();
+    // double targetYaw = Robot.intakeCam.getNoteTargetYaw();
+    // double targetPitch = Robot.intakeCam.getNoteTargetPitch();
 
-    double stickX = Robot.driverControls.getX() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
-    double stickY = Robot.driverControls.getY() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
-    double stickRotation =
-        Robot.driverControls.getRotation() * Constants.SWERVE.MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND;
+    // double stickX = Robot.driverControls.getX() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
+    // double stickY = Robot.driverControls.getY() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
+    // double stickRotation =
+    //     Robot.driverControls.getRotation() * Constants.SWERVE.MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND;
 
-    if (Robot.driverControls.getLeftTrigger() >= CONTROLLER.DRIVE_TRANSLATE_INTAKE_THRESHOLD) {
+    // if (Robot.driverControls.getLeftTrigger() >= CONTROLLER.DRIVE_TRANSLATE_INTAKE_THRESHOLD) {
 
-      executeAutoPickup(targetPitch, targetYaw);
-    } else if (Robot.driverControls.isLeftTriggerPressed()) {
-      executeTargetLock(targetPitch, targetYaw, stickX, stickY);
-    } else {
-      executeDriveNormal(stickX, stickY, stickRotation);
-    }
+    //   executeAutoPickup(targetPitch, targetYaw);
+    // } else if (Robot.driverControls.isLeftTriggerPressed()) {
+    //   executeTargetLock(targetPitch, targetYaw, stickX, stickY);
+    // } else {
+    //   executeDriveNormal(stickX, stickY, stickRotation);
+    // }
 
-    if (!Double.isNaN(targetPitch)) {
-      m_lastPitch = targetPitch;
-    }
+    // if (!Double.isNaN(targetPitch)) {
+    //   m_lastPitch = targetPitch;
+    // }
   }
 
   private void executeCreepForward() {
@@ -114,6 +114,6 @@ public class DrivePickup extends Command {
   @Override
   public void end(boolean interrupted) {
     Robot.swerve.stopMotors();
-    Robot.intakeCam.setPipeline(m_startingPipeline); 
+    // Robot.intakeCam.setPipeline(m_startingPipeline); 
   }
 }
