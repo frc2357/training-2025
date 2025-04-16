@@ -18,7 +18,7 @@ public class VelDrive extends Command {
 
   @Override
   public void execute() {
-    System.out.println(Robot.swerve.getModuleStates()[0].speedMetersPerSecond);
+    // System.out.println(Robot.swerve.getModuleStates()[0].speedMetersPerSecond);
 
     double rps = Robot.swerve.getModule(0).getDriveMotor().getVelocity().getValueAsDouble();
     SmartDashboard.putNumber("Motor rps", rps);

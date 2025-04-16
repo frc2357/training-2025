@@ -1,12 +1,9 @@
 package frc.robot.commands.drive;
 
-import java.lang.reflect.Parameter;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CompSwerveTunerConstants;
+import frc.robot.TunerConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import edu.wpi.first.units.measure.measure.*;
 
 
 public class DefaultDrive extends Command {
@@ -24,8 +21,8 @@ public class DefaultDrive extends Command {
       Robot.swerve.stopMotors();
     } else {
       Robot.swerve.driveFieldRelative(
-          y * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          x * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+          y * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+          x * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
           rotation * Constants.SWERVE.MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND);
     }
   }

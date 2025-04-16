@@ -58,18 +58,19 @@ public class AmpSideBranchingPath extends SequentialCommandGroup {
   }
 
   private boolean isNoteInfrontOfBot(double yawToleranceDegrees, double maximumPitchDegrees) {
-    System.out.println(
-        "[BP] CURRENT CAMERA YAW: "
-            + Robot.intakeCam.getNoteTargetYaw()
-            + " | YAW TOLERANCE: "
-            + yawToleranceDegrees
-            + "\n[BP] CURRENT CAMERA PITCH: "
-            + Robot.intakeCam.getNoteTargetPitch()
-            + " | MAX ALLOWED PITCH: "
-            + maximumPitchDegrees);
+    // System.out.println(
+    //     "[BP] CURRENT CAMERA YAW: "
+    //         + Robot.intakeCam.getNoteTargetYaw()
+    //         + " | YAW TOLERANCE: "
+    //         + yawToleranceDegrees
+    //         + "\n[BP] CURRENT CAMERA PITCH: "
+    //         + Robot.intakeCam.getNoteTargetPitch()
+    //         + " | MAX ALLOWED PITCH: "
+    //         + maximumPitchDegrees);
 
-    return (Math.abs(Robot.intakeCam.getNoteTargetYaw()) <= yawToleranceDegrees)
-        && Robot.intakeCam.getNoteTargetPitch() <= maximumPitchDegrees;
+    // return (Math.abs(Robot.intakeCam.getNoteTargetYaw()) <= yawToleranceDegrees)
+    //     && Robot.intakeCam.getNoteTargetPitch() <= maximumPitchDegrees;
+    return false;
   }
 
   private SequentialCommandGroup grabN1ScoreAndPosition() {
@@ -80,7 +81,7 @@ public class AmpSideBranchingPath extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("AmpSide4Note2WallFirst")
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),
@@ -97,7 +98,7 @@ public class AmpSideBranchingPath extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 // drive back with N2 and shoot
                 new DriveChoreoPath("AmpSide4Note3WallFirst")
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),

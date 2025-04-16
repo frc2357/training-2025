@@ -1,7 +1,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CompSwerveTunerConstants;
+import frc.robot.TunerConstants;
 import frc.robot.Constants.SWERVE;
 import frc.robot.Robot;
 import frc.robot.util.RobotMath;
@@ -17,62 +17,63 @@ public class TargetLockOnSpeaker extends Command {
   }
 
   public TargetLockOnSpeaker(boolean stopOnEnd) {
-    m_startingPipeline = Robot.shooterCam.getPipeline();
-    addRequirements(Robot.swerve, Robot.shooterCam);
+    // m_startingPipeline = Robot.shooterCam.getPipeline();
+    // addRequirements(Robot.swerve, Robot.shooterCam);
   }
 
   @Override
   public void initialize() {
-    Robot.shooterCam.setAprilTagPipelineActive();
+    // Robot.shooterCam.setAprilTagPipelineActive();
   }
 
   @Override
   public void execute() {
-    var pitch = Robot.shooterCam.getSpeakerTargetPitch();
-    if (Double.isNaN(pitch)) { // stops rotating if we dont have valid target data.
-      Robot.swerve.driveTargetLock(
-          Robot.driverControls.getY() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          Robot.driverControls.getX() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          0,
-          0,
-          false);
-      return;
-    }
-    int curveIndex = RobotMath.getCurveSegmentIndex(Robot.shooterCurve, pitch);
-    if (curveIndex == -1) { // stops rotating if we dont have a valid curve index.
-      Robot.swerve.driveTargetLock(
-          Robot.driverControls.getY() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          Robot.driverControls.getX() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          0,
-          0,
-          false);
-      return;
-    }
-    // dont need to check for NaN as we already have.
-    var targetYaw = Robot.shooterCam.getSpeakerTargetYaw();
-    m_yawOffset = Robot.swerve.updateVisionTargeting(pitch, m_yawOffset);
-    Robot.swerve.driveTargetLock(
-        Robot.driverControls.getY() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-        Robot.driverControls.getX() * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-        !Double.isNaN(targetYaw) ? targetYaw : 0,
-        m_yawOffset,
-        !Double.isNaN(targetYaw));
+    // var pitch = Robot.shooterCam.getSpeakerTargetPitch();
+    // if (Double.isNaN(pitch)) { // stops rotating if we dont have valid target data.
+    //   Robot.swerve.driveTargetLock(
+    //       Robot.driverControls.getY() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //       Robot.driverControls.getX() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //       0,
+    //       0,
+    //       false);
+    //   return;
+    // }
+    // int curveIndex = RobotMath.getCurveSegmentIndex(Robot.shooterCurve, pitch);
+    // if (curveIndex == -1) { // stops rotating if we dont have a valid curve index.
+    //   Robot.swerve.driveTargetLock(
+    //       Robot.driverControls.getY() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //       Robot.driverControls.getX() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //       0,
+    //       0,
+    //       false);
+    //   return;
+    // }
+    // // dont need to check for NaN as we already have.
+    // var targetYaw = Robot.shooterCam.getSpeakerTargetYaw();
+    // m_yawOffset = Robot.swerve.updateVisionTargeting(pitch, m_yawOffset);
+    // Robot.swerve.driveTargetLock(
+    //     Robot.driverControls.getY() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //     Robot.driverControls.getX() * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+    //     !Double.isNaN(targetYaw) ? targetYaw : 0,
+    //     m_yawOffset,
+    //     !Double.isNaN(targetYaw));
   }
 
   @Override
   public boolean isFinished() {
-    double yaw = Robot.shooterCam.getSpeakerTargetYaw();
-    if (Double.isNaN(yaw) || m_stopOnEnd) {
-      return false;
-    }
-    var isInTolerance = Utility.isWithinTolerance(yaw, m_yawOffset, SWERVE.TARGET_LOCK_TOLERANCE);
-    return isInTolerance;
+    // double yaw = Robot.shooterCam.getSpeakerTargetYaw();
+    // if (Double.isNaN(yaw) || m_stopOnEnd) {
+    //   return false;
+    // }
+    // var isInTolerance = Utility.isWithinTolerance(yaw, m_yawOffset, SWERVE.TARGET_LOCK_TOLERANCE);
+    // return isInTolerance;
+    return true;
   }
 
   @Override
   public void end(boolean interupted) {
     System.out.println("[TargetLockOnSpeaker] WAS INTERRUPTED: " + interupted);
     Robot.swerve.stopMotors();
-    Robot.shooterCam.setPipeline(m_startingPipeline);
+    // Robot.shooterCam.setPipeline(m_startingPipeline);
   } 
 }

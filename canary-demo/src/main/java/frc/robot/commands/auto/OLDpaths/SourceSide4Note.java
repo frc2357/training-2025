@@ -40,7 +40,7 @@ public class SourceSide4Note extends SequentialCommandGroup {
         // Drive back with note 2 and shoot
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new DriveChoreoPath("SourceSide4Note2", 0, false).deadlineWith(new AutoPickup()),
+                new DriveChoreoPath("SourceSide4Note2", 0, false).deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),
@@ -54,7 +54,7 @@ public class SourceSide4Note extends SequentialCommandGroup {
         // Drive back with note 3 and shoot
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
-                new DriveChoreoPath("SourceSide4Note3", 0, false).deadlineWith(new AutoPickup()),
+                new DriveChoreoPath("SourceSide4Note3", 0, false).deadlineFor(new AutoPickup()),
                 new TargetLockOnSpeaker(true).withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new ShooterWaitForRPM(),
                 new IntakeFeedToShooter().withTimeout(0.2)),
@@ -67,7 +67,7 @@ public class SourceSide4Note extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("SourceSide4Note4", 0, false, true)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),

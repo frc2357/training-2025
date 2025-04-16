@@ -90,20 +90,20 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
 
-    shooterCam =
-        new ShooterPhotonCamera(
-            Constants.SHOOTER_PHOTON_CAMERA.NAME,
-            Constants.SHOOTER_PHOTON_CAMERA.ROBOT_TO_CAMERA_TRANSFORM,
-            Constants.SHOOTER_PHOTON_CAMERA.HEAD_ON_TOLERANCE);
-    intakeCam =
-        new IntakePhotonCamera(
-            Constants.INTAKE_PHOTON_CAMERA.NAME,
-            Constants.INTAKE_PHOTON_CAMERA.ROBOT_TO_CAMERA_TRANSFORM,
-            Constants.INTAKE_PHOTON_CAMERA.HEAD_ON_TOLERANCE);
+    // shooterCam =
+    //     new ShooterPhotonCamera(
+    //         Constants.SHOOTER_PHOTON_CAMERA.NAME,
+    //         Constants.SHOOTER_PHOTON_CAMERA.ROBOT_TO_CAMERA_TRANSFORM,
+    //         Constants.SHOOTER_PHOTON_CAMERA.HEAD_ON_TOLERANCE);
+    // intakeCam =
+    //     new IntakePhotonCamera(
+    //         Constants.INTAKE_PHOTON_CAMERA.NAME,
+    //         Constants.INTAKE_PHOTON_CAMERA.ROBOT_TO_CAMERA_TRANSFORM,
+    //         Constants.INTAKE_PHOTON_CAMERA.HEAD_ON_TOLERANCE);
 
     state = new RobotState();
 
-    swerve = CompSwerveTunerConstants.createDrivetrain();
+    swerve = TunerConstants.createDrivetrain();
     SmartDashboard.putData("Cross Wheels Into X", new CrossWheels());
     shooter = new Shooter();
     pivot = new Pivot();
@@ -152,8 +152,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    shooterCam.updateResult();
-    intakeCam.updateResult(); 
+    // shooterCam.updateResult();
+    // intakeCam.updateResult(); 
 
     SmartDashboard.putNumber("Extension rotations", extensionArm.getRotations());
 

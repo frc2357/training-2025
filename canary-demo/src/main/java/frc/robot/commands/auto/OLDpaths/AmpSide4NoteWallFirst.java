@@ -31,7 +31,7 @@ public class AmpSide4NoteWallFirst extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("AmpSide4Note2WallFirst", 0, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),
@@ -45,7 +45,7 @@ public class AmpSide4NoteWallFirst extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("AmpSide4Note3WallFirst", 0, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.2)),

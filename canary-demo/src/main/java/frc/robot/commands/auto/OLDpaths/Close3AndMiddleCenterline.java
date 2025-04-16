@@ -44,7 +44,7 @@ public class Close3AndMiddleCenterline extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("CenterSub5Note2", 1, false, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.4)),
@@ -54,7 +54,7 @@ public class Close3AndMiddleCenterline extends SequentialCommandGroup {
         new ParallelDeadlineGroup(
             new SequentialCommandGroup(
                 new DriveChoreoPath("CenterSub5Note2", 2, false, false)
-                    .deadlineWith(new AutoPickup()),
+                    .deadlineFor(new AutoPickup()),
                 new ParallelCommandGroup(new TargetLockOnSpeaker(true), new ShooterWaitForRPM())
                     .withTimeout(SWERVE.AUTO_TARGET_LOCK_TIMEOUT_SECONDS),
                 new IntakeFeedToShooter().withTimeout(0.4)),

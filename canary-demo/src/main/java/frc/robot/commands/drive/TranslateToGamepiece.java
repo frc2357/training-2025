@@ -31,12 +31,12 @@ public class TranslateToGamepiece extends Command {
     m_rotationController = SWERVE.PIGEON_ROTATION_PID_CONTROLLER;
     m_timer = new Timer();
     m_timeToRunSeconds = timeToRunSeconds;
-    addRequirements(Robot.swerve, Robot.intakeCam);
+    // addRequirements(Robot.swerve, Robot.intakeCam);
   }
 
   @Override
   public void initialize() {
-    Robot.intakeCam.setPipeline(INTAKE_PHOTON_CAMERA.NEURAL_NETWORK_PIPELINE);
+    // Robot.intakeCam.setPipeline(INTAKE_PHOTON_CAMERA.NEURAL_NETWORK_PIPELINE);
 
     m_startRotation = Robot.swerve.getYaw();
 
@@ -68,45 +68,45 @@ public class TranslateToGamepiece extends Command {
   @Override
   public void execute() {
     // deceleration y direction
-    double yMetersPerSecond = calculateYSpeed();
+    // double yMetersPerSecond = calculateYSpeed();
 
-    double currentRotation = Robot.swerve.getYaw();
-    double rotationError = currentRotation - m_startRotation;
-    double rotationOutput =
-        m_rotationController.calculate(Rotation2d.fromDegrees(rotationError).getRadians());
-    // checks if rotation is in tolerance and outputs nothing if it is.
-    if (Utility.isWithinTolerance(
-        currentRotation, m_startRotation, SWERVE.TRANSLATE_TO_GAMEPIECE_YAW_TOLERANCE)) {
-      rotationOutput = 0;
-    }
+    // double currentRotation = Robot.swerve.getYaw();
+    // double rotationError = currentRotation - m_startRotation;
+    // double rotationOutput =
+    //     m_rotationController.calculate(Rotation2d.fromDegrees(rotationError).getRadians());
+    // // checks if rotation is in tolerance and outputs nothing if it is.
+    // if (Utility.isWithinTolerance(
+    //     currentRotation, m_startRotation, SWERVE.TRANSLATE_TO_GAMEPIECE_YAW_TOLERANCE)) {
+    //   rotationOutput = 0;
+    // }
 
-    double yaw = Robot.intakeCam.getNoteTargetYaw();
-    double pitch = Robot.intakeCam.getNoteTargetPitch();
+    // double yaw = Robot.intakeCam.getNoteTargetYaw();
+    // double pitch = Robot.intakeCam.getNoteTargetPitch();
 
-    // checks for NaN, remember that the vision returns NaN or Null if it has no / invalid data for
-    // the desired target.
-    if (Double.isNaN(yaw) || m_targetBad) {
-      System.out.println("[TranslateToGamepiece] No gamepiece detected");
-      // Continue driving forward and rotating even if we don't see a gamepiece
-      Robot.swerve.driveRobotRelative(yMetersPerSecond, 0, rotationOutput);
-    }
+    // // checks for NaN, remember that the vision returns NaN or Null if it has no / invalid data for
+    // // the desired target.
+    // if (Double.isNaN(yaw) || m_targetBad) {
+    //   System.out.println("[TranslateToGamepiece] No gamepiece detected");
+    //   // Continue driving forward and rotating even if we don't see a gamepiece
+    //   Robot.swerve.driveRobotRelative(yMetersPerSecond, 0, rotationOutput);
+    // }
 
-    // checks if were in the tolerance for yaw, sets it to the setpoint if we do, so we dont move.
-    if (Utility.isWithinTolerance(
-        yaw, m_yawController.getSetpoint(), SWERVE.TRANSLATE_TO_GAMEPIECE_YAW_TOLERANCE)) {
-      yaw = m_yawController.getSetpoint();
-    }
+    // // checks if were in the tolerance for yaw, sets it to the setpoint if we do, so we dont move.
+    // if (Utility.isWithinTolerance(
+    //     yaw, m_yawController.getSetpoint(), SWERVE.TRANSLATE_TO_GAMEPIECE_YAW_TOLERANCE)) {
+    //   yaw = m_yawController.getSetpoint();
+    // }
 
-    double xMetersPerSecond = m_yawController.calculate(yaw);
-    // filtering notes based on where the note can be seen in the camera
-    if (pitch < INTAKE_PHOTON_CAMERA.NOTE_TARGET_VALID_PITCH_LOW
-        || pitch > INTAKE_PHOTON_CAMERA.NOTE_TARGET_VALID_PITCH_HIGH) {
-      m_targetBad = true;
-      xMetersPerSecond = 0;
-    }
+    // double xMetersPerSecond = m_yawController.calculate(yaw);
+    // // filtering notes based on where the note can be seen in the camera
+    // if (pitch < INTAKE_PHOTON_CAMERA.NOTE_TARGET_VALID_PITCH_LOW
+    //     || pitch > INTAKE_PHOTON_CAMERA.NOTE_TARGET_VALID_PITCH_HIGH) {
+    //   m_targetBad = true;
+    //   xMetersPerSecond = 0;
+    // }
 
-    // System.out.println("y: " + yMetersPerSecond + ", x: " + xMetersPerSecond);
-    Robot.swerve.driveRobotRelative(yMetersPerSecond, xMetersPerSecond, rotationOutput);
+    // // System.out.println("y: " + yMetersPerSecond + ", x: " + xMetersPerSecond);
+    // Robot.swerve.driveRobotRelative(yMetersPerSecond, xMetersPerSecond, rotationOutput);
   }
 
   @Override

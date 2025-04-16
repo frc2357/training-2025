@@ -19,7 +19,7 @@ public class DriveToAmp extends Command {
 
   @Override
   public void initialize() {
-    Robot.shooterCam.setAprilTagPipelineActive();
+    // Robot.shooterCam.setAprilTagPipelineActive();
 
     // reset pids
     m_yController.setSetpoint(SWERVE.AMP_PITCH_SETPOINT);
@@ -34,49 +34,49 @@ public class DriveToAmp extends Command {
 
   @Override
   public void execute() {
-    // Rotation
-    double rotationError =
-        DriveUtility.calculateRotationError(
-            Robot.swerve.getPose().getRotation().getRadians(), m_rotationController.getSetpoint());
-    double rotationRadiansPerSecond = m_rotationController.calculate(rotationError);
-    double rotationFeedforward =
-        Math.copySign(SWERVE.PIGEON_ROTATION_FEEDFORWARD, rotationRadiansPerSecond);
+    // // Rotation
+    // double rotationError =
+    //     DriveUtility.calculateRotationError(
+    //         Robot.swerve.getPose().getRotation().getRadians(), m_rotationController.getSetpoint());
+    // double rotationRadiansPerSecond = m_rotationController.calculate(rotationError);
+    // double rotationFeedforward =
+    //     Math.copySign(SWERVE.PIGEON_ROTATION_FEEDFORWARD, rotationRadiansPerSecond);
 
-    rotationRadiansPerSecond += rotationFeedforward;
-    if (rotationError == m_rotationController.getSetpoint()) {
-      rotationRadiansPerSecond = 0;
-    }
+    // rotationRadiansPerSecond += rotationFeedforward;
+    // if (rotationError == m_rotationController.getSetpoint()) {
+    //   rotationRadiansPerSecond = 0;
+    // }
 
-    // Translation
-    double yaw = Robot.shooterCam.getAmpTargetYaw();
+    // // Translation
+    // double yaw = Robot.shooterCam.getAmpTargetYaw();
 
-    // If rotation goal hasn't been set, try again
-    if (Double.isNaN(m_rotationController.getSetpoint())) {
-      m_rotationController.setSetpoint(DriveUtility.getAmpRotationGoal());
-    }
-    if (Double.isNaN(yaw)) {
-      System.out.println("[DrivtToAmp] No AMP Detected");
-      Robot.swerve.driveRobotRelative(0.0, 0.0, rotationRadiansPerSecond);
-      return;
-    }
+    // // If rotation goal hasn't been set, try again
+    // if (Double.isNaN(m_rotationController.getSetpoint())) {
+    //   m_rotationController.setSetpoint(DriveUtility.getAmpRotationGoal());
+    // }
+    // if (Double.isNaN(yaw)) {
+    //   System.out.println("[DrivtToAmp] No AMP Detected");
+    //   Robot.swerve.driveRobotRelative(0.0, 0.0, rotationRadiansPerSecond);
+    //   return;
+    // }
 
-    double pitch = Robot.shooterCam.getAmpTargetPitch();
+    // double pitch = Robot.shooterCam.getAmpTargetPitch();
 
-    yaw =
-        DriveUtility.adjustYawForApriltag(
-            yaw,
-            pitch,
-            rotationError - m_rotationController.getSetpoint(),
-            SWERVE.AMP_PITCH_SETPOINT,
-            SWERVE.VISION_CLOSE_PITCH,
-            SWERVE.VISION_YAW_TOLERANCE);
-    pitch =
-        DriveUtility.adjustPitchForApriltag(
-            pitch, SWERVE.AMP_PITCH_SETPOINT, SWERVE.VISION_PITCH_TOLERANCE);
+    // yaw =
+    //     DriveUtility.adjustYawForApriltag(
+    //         yaw,
+    //         pitch,
+    //         rotationError - m_rotationController.getSetpoint(),
+    //         SWERVE.AMP_PITCH_SETPOINT,
+    //         SWERVE.VISION_CLOSE_PITCH,
+    //         SWERVE.VISION_YAW_TOLERANCE);
+    // pitch =
+    //     DriveUtility.adjustPitchForApriltag(
+    //         pitch, SWERVE.AMP_PITCH_SETPOINT, SWERVE.VISION_PITCH_TOLERANCE);
 
-    double xMetersPerSecond = m_xController.calculate(yaw);
-    double yMetersPerSecond = m_yController.calculate(pitch);
-    Robot.swerve.driveRobotRelative(-yMetersPerSecond, -xMetersPerSecond, rotationRadiansPerSecond);
+    // double xMetersPerSecond = m_xController.calculate(yaw);
+    // double yMetersPerSecond = m_yController.calculate(pitch);
+    // Robot.swerve.driveRobotRelative(-yMetersPerSecond, -xMetersPerSecond, rotationRadiansPerSecond);
   }
 
   @Override

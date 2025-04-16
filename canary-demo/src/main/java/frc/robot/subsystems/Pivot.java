@@ -26,9 +26,9 @@ public class Pivot extends SubsystemBase {
   private double m_targetAngle;
 
   public Pivot() {
-    m_pivotMotor = new SparkMax(Constants.CAN_ID.PIVOT_MOTOR_ID, MotorType.kBrushless);
-    m_targetAngle = Double.NaN;
-    configure();
+    // m_pivotMotor = new SparkMax(Constants.CAN_ID.PIVOT_MOTOR_ID, MotorType.kBrushless);
+    // m_targetAngle = Double.NaN;
+    // configure();
 
     // m_zeroOffset = Preferences.getDouble(Constants.PIVOT.PREFERENCES_ZERO_OFFSET_KEY,
     // Double.NaN);
@@ -36,74 +36,74 @@ public class Pivot extends SubsystemBase {
     //   setZeroOffset(m_zeroOffset);
     // }
 
-    SmartDashboard.putNumber(PIVOT.PIVOT_OFFSET_KEY, 0.0);
+    // SmartDashboard.putNumber(PIVOT.PIVOT_OFFSET_KEY, 0.0);
   }
 
   private void configure() {
-    m_absoluteEncoder = m_pivotMotor.getAbsoluteEncoder();
-    m_pivotPIDController = m_pivotMotor.getClosedLoopController();
-    ClosedLoopConfig pivotPIDConfig = new ClosedLoopConfig().pidf(PIVOT.PIVOT_P, PIVOT.PIVOT_I, PIVOT.PIVOT_D, PIVOT.PIVOT_FF).outputRange(-1,1).feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
-    m_pivotMotor.setInverted(PIVOT.MOTOR_INVERTED);
+    // m_absoluteEncoder = m_pivotMotor.getAbsoluteEncoder();
+    // m_pivotPIDController = m_pivotMotor.getClosedLoopController();
+    // ClosedLoopConfig pivotPIDConfig = new ClosedLoopConfig().pidf(PIVOT.PIVOT_P, PIVOT.PIVOT_I, PIVOT.PIVOT_D, PIVOT.PIVOT_FF).outputRange(-1,1).feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+    // m_pivotMotor.setInverted(PIVOT.MOTOR_INVERTED);
 
-    AbsoluteEncoderConfig pivotAbsoluteEncoderConfig = new AbsoluteEncoderConfig().inverted(PIVOT.ENCODER_INVERTED).positionConversionFactor(PIVOT.ENCODER_POSITION_CONVERSION_FACTOR).velocityConversionFactor(PIVOT.ENCODER_VELOCITY_CONVERSION_FACTOR);
+    // AbsoluteEncoderConfig pivotAbsoluteEncoderConfig = new AbsoluteEncoderConfig().inverted(PIVOT.ENCODER_INVERTED).positionConversionFactor(PIVOT.ENCODER_POSITION_CONVERSION_FACTOR).velocityConversionFactor(PIVOT.ENCODER_VELOCITY_CONVERSION_FACTOR);
 
-    SparkBaseConfig pivotBaseConfig = new SparkMaxConfig()
-      .inverted(PIVOT.MOTOR_INVERTED)
-      .idleMode(PIVOT.IDLE_MODE)
-      .smartCurrentLimit(PIVOT.MOTOR_STALL_LIMIT_AMPS, PIVOT.MOTOR_FREE_LIMIT_AMPS)
-      .voltageCompensation(12)
-      .apply(pivotPIDConfig)
-      .apply(pivotAbsoluteEncoderConfig);
+    // SparkBaseConfig pivotBaseConfig = new SparkMaxConfig()
+    //   .inverted(PIVOT.MOTOR_INVERTED)
+    //   .idleMode(PIVOT.IDLE_MODE)
+    //   .smartCurrentLimit(PIVOT.MOTOR_STALL_LIMIT_AMPS, PIVOT.MOTOR_FREE_LIMIT_AMPS)
+    //   .voltageCompensation(12)
+    //   .apply(pivotPIDConfig)
+    //   .apply(pivotAbsoluteEncoderConfig);
     
-    m_pivotMotor.configure(pivotBaseConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-  }
-
-  public boolean isSettingAngle() {
-    return !Double.isNaN(m_targetAngle);
+    // m_pivotMotor.configure(pivotBaseConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   public void setAngle(double angle) {
-    if (Double.isNaN(angle)) {
-      System.err.println("PIVOT: Cannot set angle to NaN!");
-      return;
-    }
-    if (angle < Constants.PIVOT.MIN_PIVOT_ANGLE) {
-      System.err.println("PIVOT: Cannot set angle lower than minimum");
-      return;
-    }
-    if (angle > Constants.PIVOT.MAX_PIVOT_ANGLE) {
-      System.err.println("PIVOT: Cannot set angle higher than minimum");
-      return;
-    }
-    m_targetAngle = angle;
-    m_pivotPIDController.setReference(m_targetAngle, ControlType.kPosition);
+    // if (Double.isNaN(angle)) {
+    //   System.err.println("PIVOT: Cannot set angle to NaN!");
+    //   return;
+    // }
+    // if (angle < Constants.PIVOT.MIN_PIVOT_ANGLE) {
+    //   System.err.println("PIVOT: Cannot set angle lower than minimum");
+    //   return;
+    // }
+    // if (angle > Constants.PIVOT.MAX_PIVOT_ANGLE) {
+    //   System.err.println("PIVOT: Cannot set angle higher than minimum");
+    //   return;
+    // }
+    // m_targetAngle = angle;
+    // m_pivotPIDController.setReference(m_targetAngle, ControlType.kPosition);
   }
 
   public void setSpeed(double speed) {
-    m_pivotMotor.set(speed);
-    m_targetAngle = Double.NaN;
+    // m_pivotMotor.set(speed);
+    // m_targetAngle = Double.NaN;
   }
 
   public void stop() {
-    m_pivotMotor.stopMotor();
-    m_targetAngle = Double.NaN;
+    // m_pivotMotor.stopMotor();
+    // m_targetAngle = Double.NaN;
   }
 
   public double getVelocity() {
-    return m_absoluteEncoder.getVelocity();
+    return 0;
+    // return m_absoluteEncoder.getVelocity();
   }
 
   public double getTargetAngle() {
-    return m_targetAngle;
+    return 0;
+    // return m_targetAngle;
   }
 
   public double getCurrentAngle() {
-    return m_absoluteEncoder.getPosition();
+    return 0;
+    // return m_absoluteEncoder.getPosition();
   }
 
   public boolean isPivotAtAngle() {
-    return Utility.isWithinTolerance(
-        getCurrentAngle(), m_targetAngle, PIVOT.POSITION_ALLOWED_ERROR);
+    return true;
+    // return Utility.isWithinTolerance(
+    //     getCurrentAngle(), m_targetAngle, PIVOT.POSITION_ALLOWED_ERROR);
   }
 
   public void setZero() {

@@ -1,7 +1,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.CompSwerveTunerConstants;
+import frc.robot.TunerConstants;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
@@ -20,8 +20,8 @@ public class RobotRelativeDrive extends Command {
       Robot.swerve.stopMotors();
     } else {
       Robot.swerve.driveRobotRelative(
-          y * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
-          x * CompSwerveTunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+          y * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
+          x * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(),
           rotation * Constants.SWERVE.MAX_ANGULAR_RATE_ROTATIONS_PER_SECOND);
     }
   }

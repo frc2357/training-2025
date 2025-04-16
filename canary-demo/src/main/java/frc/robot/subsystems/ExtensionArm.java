@@ -26,56 +26,59 @@ public class ExtensionArm extends SubsystemBase {
   private double m_targetRotations;
 
   public ExtensionArm() {
-    m_motor = new SparkMax(Constants.CAN_ID.TRAP_AMP_ARM_MOTOR_ID, MotorType.kBrushless);
-    configure();
+    // m_motor = new SparkMax(Constants.CAN_ID.TRAP_AMP_ARM_MOTOR_ID, MotorType.kBrushless);
+    // configure();
   }
 
   private void configure() {
-    MAXMotionConfig maxMotionConfig = new MAXMotionConfig().maxVelocity(EXTENSION_ARM.SMART_MOTION_MAX_VEL_RPM).maxAcceleration(EXTENSION_ARM.SMART_MOTION_MAX_ACC_RPM).allowedClosedLoopError(EXTENSION_ARM.SMART_MOTION_ALLOWED_ERROR);
+    // MAXMotionConfig maxMotionConfig = new MAXMotionConfig().maxVelocity(EXTENSION_ARM.SMART_MOTION_MAX_VEL_RPM).maxAcceleration(EXTENSION_ARM.SMART_MOTION_MAX_ACC_RPM).allowedClosedLoopError(EXTENSION_ARM.SMART_MOTION_ALLOWED_ERROR);
     
-    ClosedLoopConfig PIDConfig = new ClosedLoopConfig().pidf(EXTENSION_ARM.MOTOR_PID_P, EXTENSION_ARM.MOTOR_PID_I, EXTENSION_ARM.MOTOR_PID_D, EXTENSION_ARM.MOTOR_PID_FF)
-    .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder).outputRange(-1, 1).apply(maxMotionConfig);
+    // ClosedLoopConfig PIDConfig = new ClosedLoopConfig().pidf(EXTENSION_ARM.MOTOR_PID_P, EXTENSION_ARM.MOTOR_PID_I, EXTENSION_ARM.MOTOR_PID_D, EXTENSION_ARM.MOTOR_PID_FF)
+    // .feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder).outputRange(-1, 1).apply(maxMotionConfig);
     
-    AlternateEncoderConfig altEncoderConfig = new AlternateEncoderConfig().inverted(EXTENSION_ARM.ENCODER_INVERTED);
+    // AlternateEncoderConfig altEncoderConfig = new AlternateEncoderConfig().inverted(EXTENSION_ARM.ENCODER_INVERTED);
     
-    SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(EXTENSION_ARM.MOTOR_IS_INVERTED).idleMode(EXTENSION_ARM.MOTOR_IDLE_MODE).smartCurrentLimit(EXTENSION_ARM.MOTOR_STALL_LIMIT_AMPS, EXTENSION_ARM.MOTOR_FREE_LIMIT_AMPS).apply(PIDConfig);
+    // SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(EXTENSION_ARM.MOTOR_IS_INVERTED).idleMode(EXTENSION_ARM.MOTOR_IDLE_MODE).smartCurrentLimit(EXTENSION_ARM.MOTOR_STALL_LIMIT_AMPS, EXTENSION_ARM.MOTOR_FREE_LIMIT_AMPS).apply(PIDConfig);
     
-    m_motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-    m_encoder = m_motor.getAlternateEncoder();
+    // m_motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    // m_encoder = m_motor.getAlternateEncoder();
 
-    m_PIDController = m_motor.getClosedLoopController();
+    // m_PIDController = m_motor.getClosedLoopController();
   }
 
   public void setSpeed(double speed) {
-    m_motor.set(speed);
-    m_targetRotations = Double.NaN;
+    // m_motor.set(speed);
+    // m_targetRotations = Double.NaN;
   }
 
   public void setTargetRotations(double targetRotations) {
-    m_targetRotations = targetRotations;
-    m_PIDController.setReference(m_targetRotations, ControlType.kMAXMotionPositionControl);
+    // m_targetRotations = targetRotations;
+    // m_PIDController.setReference(m_targetRotations, ControlType.kMAXMotionPositionControl);
   }
 
   public void stop() {
-    m_motor.stopMotor();
-    m_targetRotations = Double.NaN;
+    // m_motor.stopMotor();
+    // m_targetRotations = Double.NaN;
   }
 
   public void setZero() {
-    m_encoder.setPosition(0);
-    System.out.println("[Extension Arm] Zero Set");
+    // m_encoder.setPosition(0);
+    // System.out.println("[Extension Arm] Zero Set");
   }
 
   public double getRotations() {
-    return m_encoder.getPosition() * -1; // DO NOT CHANGE! rev is stupid and we cant invert the alt encoder
+    return 0;
+    // return m_encoder.getPosition() * -1; // DO NOT CHANGE! rev is stupid and we cant invert the alt encoder
   }
 
   public double getVelocity() {
-    return m_encoder.getVelocity() * -1; // DO NOT CHANGE! rev is stupid and we cant invert the alt encoder
+    return 0;
+    // return m_encoder.getVelocity() * -1; // DO NOT CHANGE! rev is stupid and we cant invert the alt encoder
   }
 
   public boolean isAtTargetRotations() {
-    return Utility.isWithinTolerance(
-        getRotations(), m_targetRotations, EXTENSION_ARM.SMART_MOTION_ALLOWED_ERROR);
+    return true;
+    // return Utility.isWithinTolerance(
+    //     getRotations(), m_targetRotations, EXTENSION_ARM.SMART_MOTION_ALLOWED_ERROR);
   }
 }
