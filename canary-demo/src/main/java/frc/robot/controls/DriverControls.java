@@ -140,7 +140,7 @@ public class DriverControls implements RumbleInterface {
     //             new LEDsSetIdle()));
 
     m_leftTrigger.whileTrue(new Pickup().andThen(new IntakeRepositionNote()));
-    m_rightTriggerPrime.whileTrue(new VisionlessShootingWithFeeding(2000, 55));
+    m_rightTriggerPrime.whileTrue(new VisionlessShootingWithFeeding(m_shooterRPMSetpoint, 55));
   }
 
   public double getX() {
@@ -190,8 +190,7 @@ public class DriverControls implements RumbleInterface {
 
   public double modifyAxis(double value) {
     value = deadband(value, m_deadband);
-    // value = Math.copySign(Math.pow(value,
-    // Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
+    // value = Math.copySign(Math.pow(value,Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
     return value;
   }
 

@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -42,6 +43,10 @@ import frc.robot.util.RobotMath;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Subsystem {
+    private double m_translationSpeedPercentage = .5;
+    private double m_rotationSpeedPercentage = .5;
+    private double m_rampRateExponent = 1;
+
     private final SwerveRequest.ApplyRobotSpeeds robotSpeedRequest =
         new SwerveRequest.ApplyRobotSpeeds();
 
@@ -147,6 +152,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        SmartDashboard.putNumber("Translation Speed Percentage", m_translationSpeedPercentage * 100);
+        SmartDashboard.putNumber("Rotation Speed Percentage", m_rotationSpeedPercentage * 100);
+        SmartDashboard.putNumber("Ramp Rate Exponent (default 1)", m_rampRateExponent);
     }
 
     /**
@@ -369,9 +377,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         applyRequest(
             () ->
                 fieldRelative
-                    .withVelocityX(velocityXMetersPerSecond)
-                    .withVelocityY(velocityYMetersPerSecond)
-                    .withRotationalRate(rotationRateRadiansPerSecond));
+                    .withVelocityX(applyRampRate(velocityXMetersPerSecond * m_translationSpeedPercentage))
+                    .withVelocityY(applyRampRate(velocityYMetersPerSecond * m_translationSpeedPercentage))
+                    .withRotationalRate(applyRampRate(rotationRateRadiansPerSecond * m_rotationSpeedPercentage)));
     }
 
     @Override
@@ -393,6 +401,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+        m_translationSpeedPercentage = SmartDashboard.getNumber("Translation Speed Percentage", 0.5)/100;
+        m_rotationSpeedPercentage = SmartDashboard.getNumber("Rotation Speed Percentage", 0.5)/100;
+        m_rampRateExponent = SmartDashboard.getNumber("Ramp Rate Exponent (default 1)", 1);
     }
 
     private void startSimThread() {
@@ -467,5 +479,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         return RobotMath.linearlyInterpolate(
             highYawSetopint, lowYawSetpoint, highPitch, lowPitch, pitch);
+    }
+
+    private double applyRampRate(double value) {
+        return Math.copySign(Math.pow(value, m_rampRateExponent), value);
     }
 }
