@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -17,12 +19,15 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   public static CommandSwerveDrivetrain swerve;
+  public static DriverControls driverControls;
   private static Command DefaultDrive;
 
   public Robot() {
     m_robotContainer = new RobotContainer();
     swerve = TunerConstants.createDrivetrain();
     DefaultDrive = new DefaultDrive();
+    driverControls = new DriverControls(new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),
+        Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
   }
 
   @Override
