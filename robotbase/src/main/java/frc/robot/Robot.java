@@ -16,18 +16,20 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  public static RobotContainer m_robotContainer;
 
   public static CommandSwerveDrivetrain swerve;
   public static DriverControls driverControls;
-  private static Command DefaultDrive;
+  public static Command defaultDrive;
 
   public Robot() {
-    m_robotContainer = new RobotContainer();
+    System.out.println("Start Robot init");
     swerve = TunerConstants.createDrivetrain();
-    DefaultDrive = new DefaultDrive();
+    defaultDrive = new DefaultDrive();
     driverControls = new DriverControls(new XboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),
         Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    m_robotContainer = new RobotContainer();
+    System.out.println("End Robot init");
   }
 
   @Override
