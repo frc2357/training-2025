@@ -19,10 +19,11 @@ public final class Constants {
     }
 
     public static final class SWERVE {
-        public static final AngularVelocity MAX_ANGULAR_RATE = RotationsPerSecond.of(0.75);
-        public static final LinearVelocity MAX_SPEED = TunerConstants.kSpeedAt12Volts; // kSpeedAt12Volts
-        // desired top speed
-        // rotation per
-        // second
+        public static final AngularVelocity MAX_ANGULAR_RATE = RotationsPerSecond.of(1);
+        public static final LinearVelocity MAX_SPEED = TunerConstants.kSpeedAt12Volts;
+
+        public static final double AXIS_MAX_ANGULAR_RATE = (.5);
+        public static final double AXIS_MAX_SPEED = (.5);
+
     }
 }

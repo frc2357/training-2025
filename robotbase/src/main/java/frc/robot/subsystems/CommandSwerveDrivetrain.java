@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -318,11 +321,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void driveFieldRelative(double x, double y, double rotation) {
-        this.applyRequest(() -> drive
-                .withVelocityX(x) // Drive forward with negative Y (forward)
-                .withVelocityY(y) // Drive left with negative X (left)
-                .withRotationalRate(rotation)); // Drive counterclockwise with negative X (left)
-
+        this.setControl(drive
+                .withVelocityX(x * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive forward with negative Y
+                                                                                   // (forward)
+                .withVelocityY(y * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive left with negative X (left)
+                .withRotationalRate(rotation * Constants.SWERVE.MAX_ANGULAR_RATE.in(RadiansPerSecond)));
     }
 
     public void stopMotors() {
