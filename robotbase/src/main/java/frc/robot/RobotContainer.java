@@ -4,23 +4,16 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class RobotContainer {
+  <<<<<<<HEAD
   private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                     // max angular velocity
@@ -66,10 +59,15 @@ public class RobotContainer {
 
   private final CommandXboxController joystick = new CommandXboxController(0);
 
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();=======
+
+  private final Telemetry logger = new Telemetry(Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));>>>>>>>62ce113 (finished implementation of the basic drivebase and default drive command)
 
   public RobotContainer() {
-    Robot.swerve.setDefaultCommand(new DefaultDrive());
+    Robot.swerve.registerTelemetry(logger::telemeterize);
+
+    Robot.swerve.setDefaultCommand(Robot.defaultDrive);
+    System.out.println("default drive set");
   }
 
   public Command getAutonomousCommand() {
