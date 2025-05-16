@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Robot;
 import frc.robot.controls.util.AxisThresholdTrigger;
 import frc.robot.controls.util.RumbleInterface;
 
@@ -60,6 +61,9 @@ public class DriverControls implements RumbleInterface {
     };
 
     public void mapControls() {
+
+        m_startButton.onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
+        System.out.println("driver controls mapped");
     };
 
     public double getRightX() {
@@ -95,6 +99,7 @@ public class DriverControls implements RumbleInterface {
     }
 
     public double modifyAxis(double value) {
+        System.out.println("modify-axis");
         value = deadband(value, m_deadband);
         // value = Math.copySign(Math.pow(value,
         // Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
