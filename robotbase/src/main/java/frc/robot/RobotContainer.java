@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 public class RobotContainer {
 
-  private final Telemetry logger = new Telemetry(Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
+  private final Telemetry logger = new Telemetry(
+    Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond)
+  );
 
   public RobotContainer() {
     Robot.swerve.registerTelemetry(logger::telemeterize);
