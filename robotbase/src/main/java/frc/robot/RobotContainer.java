@@ -9,97 +9,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public class RobotContainer {
-<<<<<<< HEAD
-  private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-                                                                                    // max angular velocity
 
-  /* Setting up bindings for necessary control of the swerve drive platform */
-  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-
-<<<<<<< HEAD
-  private final Telemetry logger = new Telemetry(MaxSpeed);
-
-  private final CommandXboxController joystick = new CommandXboxController(0);
-
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  private final Telemetry logger = new Telemetry(Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
 
   public RobotContainer() {
-    Robot.swerve.setDefaultCommand(new DefaultDrive());
+    Robot.swerve.registerTelemetry(logger::telemeterize);
+
+    Robot.swerve.setDefaultCommand(Robot.defaultDrive);
+    System.out.println("default drive set");
   }
 
-  private void configureBindings() {
-    // Note that X is defined as forward according to WPILib convention,
-    // and Y is defined as to the left according to WPILib convention.
-    drivetrain.setDefaultCommand(
-        // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
-                                                                                           // negative Y
-                                                                                           // (forward)
-            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
-                                                                        // negative X (left)
-        ));
-=======
-    private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
-                                                                                                   // negative Y
-                                                                                                   // (forward)
-                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
-                                                                                    // negative X (left)
-                ));
->>>>>>> 38d8e06 (updated driver controls, added more constants, and mostly worked on the commandSwerveDrivetrain subsystem alongside the DefaultDrive command)
-
-    joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.b().whileTrue(drivetrain.applyRequest(
-        () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
-
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-    // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-
-    drivetrain.registerTelemetry(logger::telemeterize);
-  }
-
-<<<<<<< HEAD
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }
-=======
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-
-    private final CommandXboxController joystick = new CommandXboxController(0);
-
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-=======
-
-    private final Telemetry logger = new Telemetry(Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
->>>>>>> 62ce113 (finished implementation of the basic drivebase and default drive command)
-
-    public RobotContainer() {
-        Robot.swerve.registerTelemetry(logger::telemeterize);
-
-        Robot.swerve.setDefaultCommand(Robot.defaultDrive);
-        System.out.println("default drive set");
-    }
-
-    public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
-    }
->>>>>>> 38d8e06 (updated driver controls, added more constants, and mostly worked on the commandSwerveDrivetrain subsystem alongside the DefaultDrive command)
 }
