@@ -5,8 +5,8 @@ import frc.robot.Robot;
 
 public class CoralRunnerStop extends Command {
 
-  public CoralRunenrStop() {
-    addRequirements(Robot.CoralRunner);
+  public CoralRunnerStop() {
+    addRequirements(Robot.coralRunner);
   }
 
   @Override
