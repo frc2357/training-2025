@@ -22,27 +22,30 @@ import com.revrobotics.spark.config.SparkMaxConfig;
  */
 public final class Constants {
 
-    public static class OperatorConstants {
+  public static class OperatorConstants {
 
-        public static final int kDriverControllerPort = 0;
-    }
+    public static final int kDriverControllerPort = 0;
+  }
 
-    public static class CAN_IDS {
-        public static final int CORAL_RUNNER_MOTOR = 29;
-    }
+  public static class CAN_IDS {
 
-    public static class DIGITAL_INPUT {
-        public static final int CORAL_RUNNER_BEAM_BREAK_OUTTAKE_ID = 8;
-        public static final int CORAL_RUNNER_BEAM_BREAK_INTAKE_ID = 7;
-    }
+    public static final int CORAL_RUNNER_MOTOR = 29;
+  }
 
-    public static class CORAL_RUNNER {
-        public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
-                .idleMode(IdleMode.kBrake)
-                .openLoopRampRate(.25)
-                .voltageCompensation(.12)
-                .smartCurrentLimit(40, 40);
-        public static final double AXIS_MAX_SPEED = .2;
-        public static final double DEBOUNCE_TIME_SECONDS = .03;
-    }
+  public static class DIGITAL_INPUT {
+
+    public static final int CORAL_RUNNER_BEAM_BREAK_OUTTAKE_ID = 8;
+    public static final int CORAL_RUNNER_BEAM_BREAK_INTAKE_ID = 7;
+  }
+
+  public static class CORAL_RUNNER {
+
+    public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(.12)
+      .smartCurrentLimit(40, 40);
+    public static final double AXIS_MAX_SPEED = .2;
+    public static final double DEBOUNCE_TIME_SECONDS = .03;
+  }
 }
