@@ -22,12 +22,31 @@ public final class Constants {
 
   public static final class SWERVE {
 
-    public static final AngularVelocity MAX_ANGULAR_RATE =
-      RotationsPerSecond.of(1);
-    public static final LinearVelocity MAX_SPEED =
-      TunerConstants.kSpeedAt12Volts;
+    public static final AngularVelocity MAX_ANGULAR_RATE = RotationsPerSecond.of(1);
+    public static final LinearVelocity MAX_SPEED = TunerConstants.kSpeedAt12Volts;
 
-    public static final double AXIS_MAX_ANGULAR_RATE = (.5);
-    public static final double AXIS_MAX_SPEED = (.5);
+    public static final double AXIS_MAX_ANGULAR_RATE = .5;
+    public static final double AXIS_MAX_SPEED = .5;
+  }
+
+  public static final class CAN_ID {
+
+    public static final int FRONT_LEFT_DRIVE_MOTOR = 11;
+    public static final int FRONT_LEFT_STEER_MOTOR = 12;
+
+    public static final int FRONT_RIGHT_DRIVE_MOTOR = 13;
+    public static final int FRONT_RIGHT_STEER_MOTOR = 14;
+
+    public static final int BACK_LEFT_DRIVE_MOTOR = 15;
+    public static final int BACK_LEFT_STEER_MOTOR = 16;
+
+    public static final int BACK_RIGHT_DRIVE_MOTOR = 17;
+    public static final int BACK_RIGHT_STEER_MOTOR = 18;
+
+    public static final int FRONT_LEFT_ENCODER = 19;
+    public static final int FRONT_RIGHT_ENCODER = 20;
+    public static final int BACK_LEFT_ENCODER = 21;
+    public static final int BACK_RIGHT_ENCODER = 22;
+
   }
 }
