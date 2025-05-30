@@ -16,16 +16,13 @@ public class DefaultDrive extends Command {
     double y = Robot.driverControls.getLeftY();
     double rotation = -Robot.driverControls.getRightX();
 
-    System.out.println(x);
-
     if (x == 0 && y == 0 && rotation == 0) {
       Robot.swerve.stopMotors();
     } else {
       Robot.swerve.driveFieldRelative(
-        y * Constants.SWERVE.AXIS_MAX_SPEED,
-        x * Constants.SWERVE.AXIS_MAX_SPEED,
-        rotation * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE
-      );
+          y * Constants.SWERVE.AXIS_MAX_SPEED,
+          x * Constants.SWERVE.AXIS_MAX_SPEED,
+          rotation * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE);
     }
   }
 }

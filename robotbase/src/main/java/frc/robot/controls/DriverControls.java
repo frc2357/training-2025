@@ -3,6 +3,7 @@ package frc.robot.controls;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot;
+import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.controls.util.RumbleInterface;
 
 public class DriverControls implements RumbleInterface {
@@ -18,8 +19,13 @@ public class DriverControls implements RumbleInterface {
   }
 
   public void mapControls() {
+
     m_controller.start().onTrue(
         Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
+
+    m_controller.rightTrigger(m_deadband).onTrue(new CoralRunnerAxis(m_controller::getRightTriggerAxis));
+    m_controller.leftTrigger(m_deadband).onTrue(new CoralRunnerAxis(this::getInverseLeftTriggerAxis));
+
   }
 
   public double getRightX() {
@@ -38,8 +44,8 @@ public class DriverControls implements RumbleInterface {
     return m_controller.getRightTriggerAxis();
   }
 
-  public double getLeftTriggerAxis() {
-    return m_controller.getLeftTriggerAxis();
+  public double getInverseLeftTriggerAxis() {
+    return -m_controller.getLeftTriggerAxis();
   }
 
   private double deadband(double value, double deadband) {
