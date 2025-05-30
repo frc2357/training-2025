@@ -1,31 +1,37 @@
 package frc.robot.commands.drive;
 
+import java.util.function.Supplier;
+
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class DefaultDrive extends Command {
 
-  public DefaultDrive() {
+  Supplier<Double> m_x;
+  Supplier<Double> m_y;
+  Supplier<Double> m_rotation;
+
+  public DefaultDrive(Supplier<Double> x, Supplier<Double> y, Supplier<Double> rotation) {
     addRequirements(Robot.swerve);
+    m_x = x;
+    m_y = y;
+    m_rotation = rotation;
   }
 
   @Override
   public void execute() {
-    double x = Robot.driverControls.getLeftX();
-    double y = Robot.driverControls.getLeftY();
-    double rotation = -Robot.driverControls.getRightX();
 
-    System.out.println(x);
+    System.out.println(m_x);
 
-    if (x == 0 && y == 0 && rotation == 0) {
+    if (m_x.get() == 0 && m_y.get() == 0 && m_rotation.get() == 0) {
       Robot.swerve.stopMotors();
     } else {
       Robot.swerve.driveFieldRelative(
-        y * Constants.SWERVE.AXIS_MAX_SPEED,
-        x * Constants.SWERVE.AXIS_MAX_SPEED,
-        rotation * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE
-      );
+          m_y.get() * Constants.SWERVE.AXIS_MAX_SPEED.in(Units.Percent),
+          m_x.get() * Constants.SWERVE.AXIS_MAX_SPEED.in(Units.Percent),
+          m_rotation.get() * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE.in(Units.Percent));
     }
   }
 }

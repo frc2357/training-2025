@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -19,21 +18,16 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   public static CommandSwerveDrivetrain swerve;
-  public static DriverControls driverControls;
-  public static Command defaultDrive;
-
+  private static DriverControls driverControls;
   private final Telemetry logger = new Telemetry(
       Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
 
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
-    defaultDrive = new DefaultDrive();
     driverControls = new DriverControls(
         new CommandXboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),
         Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
     Robot.swerve.registerTelemetry(logger::telemeterize);
-
-    Robot.swerve.setDefaultCommand(Robot.defaultDrive);
 
   }
 

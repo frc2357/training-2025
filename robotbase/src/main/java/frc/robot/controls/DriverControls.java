@@ -1,18 +1,25 @@
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot;
+import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.util.RumbleInterface;
 
 public class DriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
   private double m_deadband;
+  private static Command m_defaultDrive;
 
   public DriverControls(CommandXboxController controller, double deadband) {
     m_controller = controller;
     m_deadband = deadband;
+
+    m_defaultDrive = new DefaultDrive(m_controller::getLeftX, m_controller::getLeftY, m_controller::getRightX);
+
+    Robot.swerve.setDefaultCommand(m_defaultDrive);
 
     mapControls();
   }
