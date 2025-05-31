@@ -1,8 +1,8 @@
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.util.RumbleInterface;
@@ -10,16 +10,11 @@ import frc.robot.controls.util.RumbleInterface;
 public class DriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
-  private double m_deadband;
-  private static Command m_defaultDrive;
 
-  public DriverControls(CommandXboxController controller, double deadband) {
-    m_controller = controller;
-    m_deadband = deadband;
+  public DriverControls() {
+    m_controller = new CommandXboxController(CONTROLLER.DRIVE_CONTROLLER_PORT);
 
     m_defaultDrive = new DefaultDrive(m_controller::getLeftX, m_controller::getLeftY, m_controller::getRightX);
-
-    Robot.swerve.setDefaultCommand(m_defaultDrive);
 
     mapControls();
   }
@@ -62,7 +57,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   public double modifyAxis(double value) {
-    value = deadband(value, m_deadband);
+    value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
     // value = Math.copySign(Math.pow(value,
     // Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
     return value;

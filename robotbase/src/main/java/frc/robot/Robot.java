@@ -8,7 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -19,14 +19,18 @@ public class Robot extends TimedRobot {
 
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
+  private static Command m_defaultDrive;
+
   private final Telemetry logger = new Telemetry(
       Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
 
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
-    driverControls = new DriverControls(
-        new CommandXboxController(Constants.CONTROLLER.DRIVE_CONTROLLER_PORT),
-        Constants.CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    driverControls = new DriverControls();
+
+    m_defaultDrive = new DefaultDrive(driverControls::getLeftX, driverControls::getLeftY, driverControls::getRightX);
+
+    Robot.swerve.setDefaultCommand(m_defaultDrive);
     Robot.swerve.registerTelemetry(logger::telemeterize);
 
   }
