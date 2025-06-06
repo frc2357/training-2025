@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.util.RumbleInterface;
 
 public class DriverControls implements RumbleInterface {
@@ -13,9 +12,6 @@ public class DriverControls implements RumbleInterface {
 
   public DriverControls() {
     m_controller = new CommandXboxController(CONTROLLER.DRIVE_CONTROLLER_PORT);
-
-    m_defaultDrive = new DefaultDrive(m_controller::getLeftX, m_controller::getLeftY, m_controller::getRightX);
-
     mapControls();
   }
 

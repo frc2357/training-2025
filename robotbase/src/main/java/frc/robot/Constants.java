@@ -10,6 +10,27 @@ import frc.robot.generated.TunerConstants;
 
 public final class Constants {
 
+  public static final class CAN_ID {
+
+    public static final int FRONT_LEFT_DRIVE_MOTOR = 11;
+    public static final int FRONT_LEFT_STEER_MOTOR = 12;
+
+    public static final int FRONT_RIGHT_DRIVE_MOTOR = 13;
+    public static final int FRONT_RIGHT_STEER_MOTOR = 14;
+
+    public static final int BACK_LEFT_DRIVE_MOTOR = 15;
+    public static final int BACK_LEFT_STEER_MOTOR = 16;
+
+    public static final int BACK_RIGHT_DRIVE_MOTOR = 17;
+    public static final int BACK_RIGHT_STEER_MOTOR = 18;
+
+    public static final int FRONT_LEFT_ENCODER = 19;
+    public static final int FRONT_RIGHT_ENCODER = 20;
+    public static final int BACK_LEFT_ENCODER = 21;
+    public static final int BACK_RIGHT_ENCODER = 22;
+
+  }
+
   public static final class CONTROLLER {
 
     public static final int DRIVE_CONTROLLER_PORT = 1;
@@ -31,24 +52,4 @@ public final class Constants {
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
   }
 
-  public static final class CAN_ID {
-
-    public static final int FRONT_LEFT_DRIVE_MOTOR = 11;
-    public static final int FRONT_LEFT_STEER_MOTOR = 12;
-
-    public static final int FRONT_RIGHT_DRIVE_MOTOR = 13;
-    public static final int FRONT_RIGHT_STEER_MOTOR = 14;
-
-    public static final int BACK_LEFT_DRIVE_MOTOR = 15;
-    public static final int BACK_LEFT_STEER_MOTOR = 16;
-
-    public static final int BACK_RIGHT_DRIVE_MOTOR = 17;
-    public static final int BACK_RIGHT_STEER_MOTOR = 18;
-
-    public static final int FRONT_LEFT_ENCODER = 19;
-    public static final int FRONT_RIGHT_ENCODER = 20;
-    public static final int BACK_LEFT_ENCODER = 21;
-    public static final int BACK_RIGHT_ENCODER = 22;
-
-  }
 }

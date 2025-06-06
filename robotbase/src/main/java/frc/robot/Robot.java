@@ -16,10 +16,10 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
+  private static Command m_defaultDrive;
 
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
-  private static Command m_defaultDrive;
 
   private final Telemetry logger = new Telemetry(
       Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
@@ -29,8 +29,8 @@ public class Robot extends TimedRobot {
     driverControls = new DriverControls();
 
     m_defaultDrive = new DefaultDrive(driverControls::getLeftX, driverControls::getLeftY, driverControls::getRightX);
-
     Robot.swerve.setDefaultCommand(m_defaultDrive);
+
     Robot.swerve.registerTelemetry(logger::telemeterize);
 
   }
