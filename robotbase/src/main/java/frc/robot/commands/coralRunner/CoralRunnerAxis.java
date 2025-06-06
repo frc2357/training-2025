@@ -2,16 +2,21 @@ package frc.robot.commands.coralRunner;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
 public class CoralRunnerAxis extends Command {
-  Supplier<Double> m_axisSpeed;
+  Supplier<Dimensionless> m_axisSpeed;
 
-  public CoralRunnerAxis(Supplier<Double> axisSpeed) {
+  public CoralRunnerAxis(Supplier<Dimensionless> axisSpeed) {
     m_axisSpeed = axisSpeed;
     addRequirements(Robot.coralRunner);
 
+  }
+
+  public CoralRunnerAxis(Dimensionless axisSpeed) {
+    this(() -> axisSpeed);
   }
 
   @Override

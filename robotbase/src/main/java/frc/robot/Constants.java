@@ -6,7 +6,9 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.generated.TunerConstants;
 
@@ -63,11 +65,8 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER = 20;
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
-
-  }
-
-  public static class CAN_IDS {
     public static final int CORAL_RUNNER_MOTOR = 29;
+
   }
 
   public static class DIGITAL_INPUT {
@@ -81,7 +80,7 @@ public final class Constants {
         .openLoopRampRate(.25)
         .voltageCompensation(12)
         .smartCurrentLimit(40, 40);
-    public static final double AXIS_MAX_SPEED = .5;
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
     public static final double DEBOUNCE_TIME_SECONDS = .03;
   }
 }
