@@ -41,6 +41,7 @@ public final class Constants {
     public static final double CODRIVE_RUMBLE_INTENSITY = .5;
     public static final double DRIVE_RUMBLE_SECONDS = 2;
     public static final double CODRIVE_RUMBLE_SECONDS = 2;
+    public static final double JOYSTICK_RAMP_EXPONENT = 1;
   }
 
   public static final class SWERVE {

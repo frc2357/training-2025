@@ -31,7 +31,7 @@ public class DefaultDrive extends Command {
       Robot.swerve.driveFieldRelative(
           m_y.get() * Constants.SWERVE.AXIS_MAX_SPEED.in(Units.Percent),
           m_x.get() * Constants.SWERVE.AXIS_MAX_SPEED.in(Units.Percent),
-          m_rotation.get() * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE.in(Units.Percent));
+          -m_rotation.get() * Constants.SWERVE.AXIS_MAX_ANGULAR_RATE.in(Units.Percent));
     }
   }
 }

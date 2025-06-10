@@ -2,8 +2,10 @@ package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
+import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
 
 public class DriverControls implements RumbleInterface {
@@ -18,6 +20,8 @@ public class DriverControls implements RumbleInterface {
   public void mapControls() {
     m_controller.start().onTrue(
         Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
+    m_controller.back()
+        .onTrue(new FlipPerspective());
   }
 
   public double getRightX() {
@@ -29,7 +33,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   public double getLeftY() {
-    return modifyAxis(m_controller.getLeftY());
+    return modifyAxis(-m_controller.getLeftY());
   }
 
   public double getRightTriggerAxis() {
@@ -52,10 +56,10 @@ public class DriverControls implements RumbleInterface {
     }
   }
 
-  public double modifyAxis(double value) {
+  private double modifyAxis(double value) {
     value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
-    // value = Math.copySign(Math.pow(value,
-    // Constants.SWERVE.TRANSLATION_RAMP_EXPONENT), value);
+    value = Math.copySign(Math.pow(value,
+        Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT), value);
     return value;
   }
 
