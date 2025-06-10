@@ -34,6 +34,8 @@ public class Robot extends TimedRobot {
       driverControls::getLeftY,
       driverControls::getRightX
     );
+
+    // TODO: add alliance-dependent pose reset on roborio startup
     Robot.swerve.setDefaultCommand(m_defaultDrive);
 
     Robot.swerve.registerTelemetry(logger::telemeterize);
