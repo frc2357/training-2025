@@ -33,7 +33,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   public double getLeftY() {
-    return modifyAxis(-m_controller.getLeftY());
+    return modifyAxis(m_controller.getLeftY());
   }
 
   public double getRightTriggerAxis() {
