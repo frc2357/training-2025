@@ -22,17 +22,21 @@ public class Robot extends TimedRobot {
   private static DriverControls driverControls;
 
   private final Telemetry logger = new Telemetry(
-      Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond));
+    Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond)
+  );
 
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
     driverControls = new DriverControls();
 
-    m_defaultDrive = new DefaultDrive(driverControls::getLeftX, driverControls::getLeftY, driverControls::getRightX);
+    m_defaultDrive = new DefaultDrive(
+      driverControls::getLeftX,
+      driverControls::getLeftY,
+      driverControls::getRightX
+    );
     Robot.swerve.setDefaultCommand(m_defaultDrive);
 
     Robot.swerve.registerTelemetry(logger::telemeterize);
-
   }
 
   @Override
@@ -41,16 +45,13 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {
-  }
+  public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {
-  }
+  public void disabledPeriodic() {}
 
   @Override
-  public void disabledExit() {
-  }
+  public void disabledExit() {}
 
   @Override
   public void autonomousInit() {
@@ -60,12 +61,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {
-  }
+  public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {
-  }
+  public void autonomousExit() {}
 
   @Override
   public void teleopInit() {
@@ -75,12 +74,10 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-  }
+  public void teleopPeriodic() {}
 
   @Override
-  public void teleopExit() {
-  }
+  public void teleopExit() {}
 
   @Override
   public void testInit() {
@@ -88,11 +85,8 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 
   @Override
-  public void testExit() {
-  }
-
+  public void testExit() {}
 }

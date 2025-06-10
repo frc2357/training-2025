@@ -5,8 +5,6 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
-import java.util.function.Supplier;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -16,7 +14,6 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,64 +24,80 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
+import java.util.function.Supplier;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
  * Subsystem so it can easily be used in command-based projects.
  */
 public class CommandSwerveDrivetrain
-    extends TunerSwerveDrivetrain
-    implements Subsystem {
+  extends TunerSwerveDrivetrain
+  implements Subsystem {
 
   /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
-  private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
+  private static final Rotation2d kBlueAlliancePerspectiveRotation =
+    Rotation2d.kZero;
   /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
-  private static final Rotation2d kRedAlliancePerspectiveRotation = Rotation2d.k180deg;
+  private static final Rotation2d kRedAlliancePerspectiveRotation =
+    Rotation2d.k180deg;
   /* Keep track if we've ever applied the operator perspective before or not */
   private boolean m_hasAppliedOperatorPerspective = false;
 
   /* Swerve requests to apply during SysId characterization */
-  private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-  private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-  private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+  private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization =
+    new SwerveRequest.SysIdSwerveTranslation();
+  private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization =
+    new SwerveRequest.SysIdSwerveSteerGains();
+  private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization =
+    new SwerveRequest.SysIdSwerveRotation();
 
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final SwerveRequest.FieldCentric m_driveFieldCentric = new SwerveRequest.FieldCentric()
+  private final SwerveRequest.FieldCentric m_driveFieldCentric =
+    new SwerveRequest.FieldCentric()
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-  private final SwerveRequest.SwerveDriveBrake m_brakeX = new SwerveRequest.SwerveDriveBrake();
-  private final SwerveRequest.PointWheelsAt m_pointAt = new SwerveRequest.PointWheelsAt();
+  private final SwerveRequest.SwerveDriveBrake m_brakeX =
+    new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt m_pointAt =
+    new SwerveRequest.PointWheelsAt();
 
   /*
    * SysId routine for characterizing translation. This is used to find PID gains
    * for the drive motors.
    */
   private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-      new SysIdRoutine.Config(
-          null, // Use default ramp rate (1 V/s)
-          Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-          null, // Use default timeout (10 s)
-          // Log state with SignalLogger class
-          state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())),
-      new SysIdRoutine.Mechanism(
-          output -> setControl(m_translationCharacterization.withVolts(output)),
-          null,
-          this));
+    new SysIdRoutine.Config(
+      null, // Use default ramp rate (1 V/s)
+      Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
+      null, // Use default timeout (10 s)
+      // Log state with SignalLogger class
+      state ->
+        SignalLogger.writeString("SysIdTranslation_State", state.toString())
+    ),
+    new SysIdRoutine.Mechanism(
+      output -> setControl(m_translationCharacterization.withVolts(output)),
+      null,
+      this
+    )
+  );
 
   /*
    * SysId routine for characterizing steer. This is used to find PID gains for
    * the steer motors.
    */
   private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-      new SysIdRoutine.Config(
-          null, // Use default ramp rate (1 V/s)
-          Volts.of(7), // Use dynamic voltage of 7 V
-          null, // Use default timeout (10 s)
-          // Log state with SignalLogger class
-          state -> SignalLogger.writeString("SysIdSteer_State", state.toString())),
-      new SysIdRoutine.Mechanism(
-          volts -> setControl(m_steerCharacterization.withVolts(volts)),
-          null,
-          this));
+    new SysIdRoutine.Config(
+      null, // Use default ramp rate (1 V/s)
+      Volts.of(7), // Use dynamic voltage of 7 V
+      null, // Use default timeout (10 s)
+      // Log state with SignalLogger class
+      state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
+    ),
+    new SysIdRoutine.Mechanism(
+      volts -> setControl(m_steerCharacterization.withVolts(volts)),
+      null,
+      this
+    )
+  );
 
   /*
    * SysId routine for characterizing rotation.
@@ -94,24 +107,28 @@ public class CommandSwerveDrivetrain
    * importing the log to SysId.
    */
   private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-      new SysIdRoutine.Config(
-          /* This is in radians per second², but SysId only supports "volts per second" */
-          Volts.of(Math.PI / 6).per(Second),
-          /* This is in radians per second, but SysId only supports "volts" */
-          Volts.of(Math.PI),
-          null, // Use default timeout (10 s)
-          // Log state with SignalLogger class
-          state -> SignalLogger.writeString("SysIdRotation_State", state.toString())),
-      new SysIdRoutine.Mechanism(
-          output -> {
-            /* output is actually radians per second, but SysId only supports "volts" */
-            setControl(
-                m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-            /* also log the requested output for SysId */
-            SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-          },
-          null,
-          this));
+    new SysIdRoutine.Config(
+      /* This is in radians per second², but SysId only supports "volts per second" */
+      Volts.of(Math.PI / 6).per(Second),
+      /* This is in radians per second, but SysId only supports "volts" */
+      Volts.of(Math.PI),
+      null, // Use default timeout (10 s)
+      // Log state with SignalLogger class
+      state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
+    ),
+    new SysIdRoutine.Mechanism(
+      output -> {
+        /* output is actually radians per second, but SysId only supports "volts" */
+        setControl(
+          m_rotationCharacterization.withRotationalRate(output.in(Volts))
+        );
+        /* also log the requested output for SysId */
+        SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
+      },
+      null,
+      this
+    )
+  );
 
   /* The SysId routine to test */
   private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineTranslation;
@@ -129,10 +146,10 @@ public class CommandSwerveDrivetrain
    * @param modules             Constants for each specific module
    */
   public CommandSwerveDrivetrain(
-      SwerveDrivetrainConstants drivetrainConstants,
-      SwerveModuleConstants<?, ?, ?>... modules) {
+    SwerveDrivetrainConstants drivetrainConstants,
+    SwerveModuleConstants<?, ?, ?>... modules
+  ) {
     super(drivetrainConstants, modules);
-
   }
 
   /**
@@ -151,11 +168,11 @@ public class CommandSwerveDrivetrain
    * @param modules                 Constants for each specific module
    */
   public CommandSwerveDrivetrain(
-      SwerveDrivetrainConstants drivetrainConstants,
-      double odometryUpdateFrequency,
-      SwerveModuleConstants<?, ?, ?>... modules) {
+    SwerveDrivetrainConstants drivetrainConstants,
+    double odometryUpdateFrequency,
+    SwerveModuleConstants<?, ?, ?>... modules
+  ) {
     super(drivetrainConstants, odometryUpdateFrequency, modules);
-
   }
 
   /**
@@ -186,18 +203,19 @@ public class CommandSwerveDrivetrain
    * @param modules                   Constants for each specific module
    */
   public CommandSwerveDrivetrain(
-      SwerveDrivetrainConstants drivetrainConstants,
-      double odometryUpdateFrequency,
-      Matrix<N3, N1> odometryStandardDeviation,
-      Matrix<N3, N1> visionStandardDeviation,
-      SwerveModuleConstants<?, ?, ?>... modules) {
+    SwerveDrivetrainConstants drivetrainConstants,
+    double odometryUpdateFrequency,
+    Matrix<N3, N1> odometryStandardDeviation,
+    Matrix<N3, N1> visionStandardDeviation,
+    SwerveModuleConstants<?, ?, ?>... modules
+  ) {
     super(
-        drivetrainConstants,
-        odometryUpdateFrequency,
-        odometryStandardDeviation,
-        visionStandardDeviation,
-        modules);
-
+      drivetrainConstants,
+      odometryUpdateFrequency,
+      odometryStandardDeviation,
+      visionStandardDeviation,
+      modules
+    );
   }
 
   /**
@@ -260,11 +278,13 @@ public class CommandSwerveDrivetrain
    */
   @Override
   public void addVisionMeasurement(
-      Pose2d visionRobotPoseMeters,
-      double timestampSeconds) {
+    Pose2d visionRobotPoseMeters,
+    double timestampSeconds
+  ) {
     super.addVisionMeasurement(
-        visionRobotPoseMeters,
-        Utils.fpgaToCurrentTime(timestampSeconds));
+      visionRobotPoseMeters,
+      Utils.fpgaToCurrentTime(timestampSeconds)
+    );
   }
 
   /**
@@ -287,23 +307,27 @@ public class CommandSwerveDrivetrain
    */
   @Override
   public void addVisionMeasurement(
-      Pose2d visionRobotPoseMeters,
-      double timestampSeconds,
-      Matrix<N3, N1> visionMeasurementStdDevs) {
+    Pose2d visionRobotPoseMeters,
+    double timestampSeconds,
+    Matrix<N3, N1> visionMeasurementStdDevs
+  ) {
     super.addVisionMeasurement(
-        visionRobotPoseMeters,
-        Utils.fpgaToCurrentTime(timestampSeconds),
-        visionMeasurementStdDevs);
+      visionRobotPoseMeters,
+      Utils.fpgaToCurrentTime(timestampSeconds),
+      visionMeasurementStdDevs
+    );
   }
 
   public void driveFieldRelative(double x, double y, double rotation) {
     this.setControl(
         m_driveFieldCentric
-            .withVelocityX(x * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive forward with negative Y
-            // (forward)
-            .withVelocityY(y * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive left with negative X (left)
-            .withRotationalRate(
-                rotation * Constants.SWERVE.MAX_ANGULAR_RATE.in(RadiansPerSecond)));
+          .withVelocityX(x * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive forward with negative Y
+          // (forward)
+          .withVelocityY(y * Constants.SWERVE.MAX_SPEED.in(MetersPerSecond)) // Drive left with negative X (left)
+          .withRotationalRate(
+            rotation * Constants.SWERVE.MAX_ANGULAR_RATE.in(RadiansPerSecond)
+          )
+      );
   }
 
   public void stopMotors() {

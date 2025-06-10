@@ -28,7 +28,6 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER = 20;
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
-
   }
 
   public static final class CONTROLLER {
@@ -46,11 +45,14 @@ public final class Constants {
 
   public static final class SWERVE {
 
-    public static final AngularVelocity MAX_ANGULAR_RATE = RotationsPerSecond.of(1);
-    public static final LinearVelocity MAX_SPEED = TunerConstants.kSpeedAt12Volts;
+    public static final AngularVelocity MAX_ANGULAR_RATE =
+      RotationsPerSecond.of(1);
+    public static final LinearVelocity MAX_SPEED =
+      TunerConstants.kSpeedAt12Volts;
 
-    public static final Dimensionless AXIS_MAX_ANGULAR_RATE = Units.Percent.of(.5);
+    public static final Dimensionless AXIS_MAX_ANGULAR_RATE = Units.Percent.of(
+      .5
+    );
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
   }
-
 }

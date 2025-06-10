@@ -18,10 +18,10 @@ public class DriverControls implements RumbleInterface {
   }
 
   public void mapControls() {
-    m_controller.start().onTrue(
-        Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
-    m_controller.back()
-        .onTrue(new FlipPerspective());
+    m_controller
+      .start()
+      .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
+    m_controller.back().onTrue(new FlipPerspective());
   }
 
   public double getRightX() {
@@ -58,8 +58,10 @@ public class DriverControls implements RumbleInterface {
 
   private double modifyAxis(double value) {
     value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
-    value = Math.copySign(Math.pow(value,
-        Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT), value);
+    value = Math.copySign(
+      Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
+      value
+    );
     return value;
   }
 
