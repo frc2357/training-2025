@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Seconds;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -19,6 +23,9 @@ public class CoralRunner extends SubsystemBase {
 
   private Debouncer m_debouncer_Intake;
   private Debouncer m_debouncer_Outtake;
+
+  private boolean m_isOuttakeBeamBroken;
+  private boolean m_isIntakeBeamBroken;
 
   public CoralRunner() {
     m_motor = new SparkMax(
@@ -39,30 +46,41 @@ public class CoralRunner extends SubsystemBase {
     );
 
     m_debouncer_Intake = new Debouncer(
-      Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS,
+      Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS.in(Seconds),
       DebounceType.kBoth
     );
     m_debouncer_Outtake = new Debouncer(
-      Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS,
+      Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS.in(Seconds),
       DebounceType.kBoth
     );
   }
 
-  public void setAxisSpeed(double axisSpeed) {
-    double speed = axisSpeed * Constants.CORAL_RUNNER.AXIS_MAX_SPEED;
-    m_motor.set(speed);
+  public void setAxisSpeed(Dimensionless axisSpeed) {
+    Dimensionless speed = axisSpeed.times(
+      Constants.CORAL_RUNNER.AXIS_MAX_SPEED
+    );
+    m_motor.set(speed.in(Percent));
   }
 
-  public void setSpeed(double speed) {
-    m_motor.set(speed);
+  public void setSpeed(Dimensionless speed) {
+    m_motor.set(speed.in(Percent));
   }
 
   public boolean isIntakeBeamBroken() {
-    return m_debouncer_Intake.calculate(m_BeamBreakSensor_Intake.get());
+    return m_isIntakeBeamBroken;
   }
 
   public boolean isOuttakeBeamBroken() {
-    return m_debouncer_Outtake.calculate(m_BeamBreakSensor_Outtake.get());
+    return m_isOuttakeBeamBroken;
+  }
+
+  public void calculateBeamBreaks() {
+    m_isOuttakeBeamBroken = m_debouncer_Outtake.calculate(
+      !m_BeamBreakSensor_Outtake.get()
+    );
+    m_isIntakeBeamBroken = m_debouncer_Intake.calculate(
+      !m_BeamBreakSensor_Intake.get()
+    );
   }
 
   public void stop() {

@@ -6,8 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CORAL_RUNNER;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
@@ -41,6 +43,7 @@ public class Robot extends TimedRobot {
    */
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
+    coralRunner = new CoralRunner();
     driverControls = new DriverControls();
 
     m_defaultDrive = new DefaultDrive(
@@ -49,17 +52,17 @@ public class Robot extends TimedRobot {
       driverControls::getRightX
     );
 
+    this.addPeriodic(
+        () -> {
+          coralRunner.calculateBeamBreaks();
+        },
+        CORAL_RUNNER.SENSOR_PERIODIC_MILISECONDS
+      );
+
     // TODO: add alliance-dependent pose reset on roborio startup
     Robot.swerve.setDefaultCommand(m_defaultDrive);
 
     Robot.swerve.registerTelemetry(logger::telemeterize);
-  }
-
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
-    // autonomous chooser on the dashboard.
-    coralRunner = new CoralRunner();
-    m_robotContainer = new RobotContainer();
   }
 
   /**
@@ -82,6 +85,15 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    SmartDashboard.putBoolean(
+      "CoralRunner isOuttakeBeamBroken",
+      coralRunner.isIntakeBeamBroken()
+    );
+    SmartDashboard.putBoolean(
+      "CoralRunner isIntakeBeamBroken",
+      coralRunner.isOuttakeBeamBroken()
+    );
   }
 
   @Override

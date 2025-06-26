@@ -9,6 +9,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.generated.TunerConstants;
 
 /**
@@ -87,9 +88,11 @@ public final class Constants {
     public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
       .idleMode(IdleMode.kBrake)
       .openLoopRampRate(.25)
-      .voltageCompensation(.12)
+      .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
-    public static final double AXIS_MAX_SPEED = .2;
-    public static final double DEBOUNCE_TIME_SECONDS = .03;
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(20);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+    public static final Time SENSOR_PERIODIC_MILISECONDS =
+      Units.Milliseconds.of(5);
   }
 }
