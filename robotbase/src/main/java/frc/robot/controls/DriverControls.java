@@ -1,10 +1,14 @@
 package frc.robot.controls;
 
+import static edu.wpi.first.units.Units.Percent;
+
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
+import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
 
@@ -22,6 +26,14 @@ public class DriverControls implements RumbleInterface {
       .start()
       .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
     m_controller.back().onTrue(new FlipPerspective());
+
+    m_controller
+      .rightTrigger()
+      .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
+
+    m_controller
+      .leftTrigger()
+      .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
   }
 
   public double getRightX() {
@@ -36,12 +48,12 @@ public class DriverControls implements RumbleInterface {
     return modifyAxis(m_controller.getLeftY());
   }
 
-  public double getRightTriggerAxis() {
-    return m_controller.getRightTriggerAxis();
+  public Dimensionless getRightTriggerAxis() {
+    return Percent.of(-m_controller.getRightTriggerAxis());
   }
 
-  public double getLeftTriggerAxis() {
-    return m_controller.getLeftTriggerAxis();
+  public Dimensionless getLeftTriggerAxis() {
+    return Percent.of(m_controller.getLeftTriggerAxis());
   }
 
   private double deadband(double value, double deadband) {

@@ -2,12 +2,28 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.generated.TunerConstants;
 
+/**
+ * The Constants class provides a convenient place for teams to hold robot-wide
+ * numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants
+ * should be declared
+ * globally (i.e. public static). Do not put anything functional in this class.
+ *
+ * <p>
+ * It is advised to statically import this class (or one of its inner classes)
+ * wherever the
+ * constants are needed, to reduce verbosity.
+ */
 public final class Constants {
 
   public static final class CAN_ID {
@@ -54,5 +70,30 @@ public final class Constants {
       .5
     );
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
+  }
+
+  public static class CAN_IDS {
+
+    public static final int CORAL_RUNNER_MOTOR = 29;
+  }
+
+  public static class DIGITAL_INPUT {
+
+    public static final int CORAL_RUNNER_BEAM_BREAK_OUTTAKE_ID = 8;
+    public static final int CORAL_RUNNER_BEAM_BREAK_INTAKE_ID = 7;
+  }
+
+  public static class CORAL_RUNNER {
+
+    public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(12)
+      .smartCurrentLimit(40, 40);
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(20);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+    public static final Time SENSOR_PERIODIC_TIME = Units.Milliseconds.of(5);
+    public static final Time SENSOR_PERIODIC_OFFSET_TIME =
+      Units.Milliseconds.of(3);
   }
 }

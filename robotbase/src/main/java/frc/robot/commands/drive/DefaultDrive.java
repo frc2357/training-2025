@@ -25,8 +25,6 @@ public class DefaultDrive extends Command {
 
   @Override
   public void execute() {
-    System.out.println(m_x);
-
     if (m_x.get() == 0 && m_y.get() == 0 && m_rotation.get() == 0) {
       Robot.swerve.stopMotors();
     } else {
