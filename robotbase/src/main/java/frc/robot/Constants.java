@@ -92,7 +92,6 @@ public final class Constants {
       .smartCurrentLimit(40, 40);
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(20);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
-    public static final Time SENSOR_PERIODIC_MILISECONDS =
-      Units.Milliseconds.of(5);
+    public static final Time SENSOR_PERIODIC_TIME = Units.Milliseconds.of(5);
   }
 }

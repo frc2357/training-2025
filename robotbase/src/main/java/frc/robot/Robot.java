@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
         () -> {
           coralRunner.calculateBeamBreaks();
         },
-        CORAL_RUNNER.SENSOR_PERIODIC_MILISECONDS
+        CORAL_RUNNER.SENSOR_PERIODIC_TIME
       );
 
     // TODO: add alliance-dependent pose reset on roborio startup
