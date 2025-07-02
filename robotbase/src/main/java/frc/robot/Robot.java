@@ -13,6 +13,7 @@ import frc.robot.Constants.CORAL_RUNNER;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.AlgaeKnocker;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralRunner;
 
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
   public static CoralRunner coralRunner;
+  public static AlgaeKnocker algaeKnocker;
 
   private final Telemetry logger = new Telemetry(
     Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond)

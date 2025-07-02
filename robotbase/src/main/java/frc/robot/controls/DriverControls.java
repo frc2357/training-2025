@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
+import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
@@ -34,6 +35,10 @@ public class DriverControls implements RumbleInterface {
     m_controller
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
+
+    m_controller
+      .b()
+      .onTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DEALGAE_SPEED));
   }
 
   public double getRightX() {
