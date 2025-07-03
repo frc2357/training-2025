@@ -46,6 +46,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
+    algaeKnocker = new AlgaeKnocker();
     driverControls = new DriverControls();
 
     m_defaultDrive = new DefaultDrive(
