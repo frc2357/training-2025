@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.CORAL_RUNNER;
+import frc.robot.Constants.SENSOR_PERIODIC;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralRunner;
+import frc.robot.subsystems.Laterator;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
   public static CoralRunner coralRunner;
+  public static Laterator laterator;
 
   private final Telemetry logger = new Telemetry(
     Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond)
@@ -45,20 +47,21 @@ public class Robot extends TimedRobot {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
     driverControls = new DriverControls();
-
+    laterator = new Laterator();
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,
       driverControls::getLeftY,
       driverControls::getRightX
     );
 
-    this.addPeriodic(
-        () -> {
-          coralRunner.calculateBeamBreaks();
-        },
-        CORAL_RUNNER.SENSOR_PERIODIC_TIME,
-        CORAL_RUNNER.SENSOR_PERIODIC_OFFSET_TIME
-      );
+    addPeriodic(
+      () -> {
+        coralRunner.calculateBeamBreaks();
+        laterator.calculateHallEffect();
+      },
+      SENSOR_PERIODIC.SENSOR_PERIODIC_TIME,
+      SENSOR_PERIODIC.SENSOR_PERIODIC_OFFSET_TIME
+    );
 
     // TODO: add alliance-dependent pose reset on roborio startup
     Robot.swerve.setDefaultCommand(m_defaultDrive);

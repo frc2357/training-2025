@@ -29,7 +29,7 @@ public class CoralRunner extends SubsystemBase {
 
   public CoralRunner() {
     m_motor = new SparkMax(
-      Constants.CAN_IDS.CORAL_RUNNER_MOTOR,
+      Constants.CAN_ID.CORAL_RUNNER_MOTOR,
       MotorType.kBrushless
     );
     m_motor.configure(

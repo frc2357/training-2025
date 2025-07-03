@@ -2,10 +2,13 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -44,6 +47,10 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER = 20;
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
+
+    public static final int CORAL_RUNNER_MOTOR = 29;
+
+    public static final int LATERATOR_MOTOR = 28;
   }
 
   public static final class CONTROLLER {
@@ -72,13 +79,9 @@ public final class Constants {
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
   }
 
-  public static class CAN_IDS {
-
-    public static final int CORAL_RUNNER_MOTOR = 29;
-  }
-
   public static class DIGITAL_INPUT {
 
+    public static final int LATERATOR_HALL_EFFECT_ID = 9;
     public static final int CORAL_RUNNER_BEAM_BREAK_OUTTAKE_ID = 8;
     public static final int CORAL_RUNNER_BEAM_BREAK_INTAKE_ID = 7;
   }
@@ -93,7 +96,44 @@ public final class Constants {
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(20);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
     public static final Time SENSOR_PERIODIC_TIME = Units.Milliseconds.of(5);
+  }
+
+  public static class SENSOR_PERIODIC {
+
+    public static final Time SENSOR_PERIODIC_TIME = Units.Milliseconds.of(5);
     public static final Time SENSOR_PERIODIC_OFFSET_TIME =
       Units.Milliseconds.of(3);
+  }
+
+  public static class LATERATOR {
+
+    public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(12)
+      .smartCurrentLimit(40, 40);
+
+    public static final double MOTOR_P = 0;
+    public static final double MOTOR_I = 0;
+    public static final double MOTOR_D = 0;
+    public static final double MOTOR_FF = 0;
+    public static final double MAX_ACCEL = 0;
+    public static final double MAX_VEL = 0;
+
+    public static final ClosedLoopConfig CLOSED_LOOP_CONFIG =
+      MOTOR_CONFIG.closedLoop
+        .pidf(MOTOR_P, MOTOR_I, MOTOR_D, MOTOR_FF)
+        .outputRange(-1, 1);
+
+    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
+
+    public static final MAXMotionConfig MAX_MOTION_CONFIG =
+      CLOSED_LOOP_CONFIG.maxMotion
+        .allowedClosedLoopError(MAX_ALLOWED_ERROR.in(Units.Rotations))
+        .maxAcceleration(MAX_ACCEL)
+        .maxVelocity(MAX_VEL);
+
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
   }
 }
