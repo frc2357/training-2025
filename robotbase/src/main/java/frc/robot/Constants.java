@@ -44,6 +44,9 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER = 20;
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
+
+    public static final int CORAL_RUNNER_MOTOR = 29;
+    public static final int ALGAE_KNOCKER_MOTOR = 33;
   }
 
   public static final class CONTROLLER {
@@ -72,11 +75,6 @@ public final class Constants {
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(.5);
   }
 
-  public static class CAN_IDS {
-
-    public static final int CORAL_RUNNER_MOTOR = 29;
-  }
-
   public static class DIGITAL_INPUT {
 
     public static final int CORAL_RUNNER_BEAM_BREAK_OUTTAKE_ID = 8;
@@ -90,10 +88,20 @@ public final class Constants {
       .openLoopRampRate(.25)
       .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
-    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(20);
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
     public static final Time SENSOR_PERIODIC_TIME = Units.Milliseconds.of(5);
     public static final Time SENSOR_PERIODIC_OFFSET_TIME =
       Units.Milliseconds.of(3);
+  }
+
+  public static class ALGAE_KNOCKER {
+
+    public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(12)
+      .smartCurrentLimit(40, 40);
+    public static final Dimensionless DE_ALGAE_SPEED = Units.Percent.of(50);
   }
 }
