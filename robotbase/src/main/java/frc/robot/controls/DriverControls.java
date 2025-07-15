@@ -38,7 +38,7 @@ public class DriverControls implements RumbleInterface {
 
     m_controller
       .b()
-      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DEALGAE_SPEED));
+      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public double getRightX() {

@@ -102,6 +102,6 @@ public final class Constants {
       .openLoopRampRate(.25)
       .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
-    public static final Dimensionless DEALGAE_SPEED = Units.Percent.of(50);
+    public static final Dimensionless DE_ALGAE_SPEED = Units.Percent.of(50);
   }
 }
