@@ -36,16 +36,16 @@ public class DriverControls implements RumbleInterface {
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
   }
 
-  public Dimensionless getRightX() {
-    return Percent.of(modifyAxis(m_controller.getRightX()));
+  public Double getRightX() {
+    return modifyAxis(m_controller.getRightX());
   }
 
-  public Dimensionless getLeftX() {
-    return Percent.of(modifyAxis(m_controller.getLeftX()));
+  public Double getLeftX() {
+    return modifyAxis(m_controller.getLeftX());
   }
 
-  public Dimensionless getLeftY() {
-    return Percent.of(modifyAxis(m_controller.getLeftY()));
+  public Double getLeftY() {
+    return modifyAxis(m_controller.getLeftY());
   }
 
   public Dimensionless getRightTriggerAxis() {

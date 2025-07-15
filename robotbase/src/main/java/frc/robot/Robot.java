@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.SENSOR_PERIODIC;
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.controls.CoDriverControls;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
 
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
+  private static CoDriverControls coDriverControls;
+
   public static CoralRunner coralRunner;
   public static Laterator laterator;
 
@@ -46,8 +49,11 @@ public class Robot extends TimedRobot {
   public Robot() {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
-    driverControls = new DriverControls();
     laterator = new Laterator();
+
+    driverControls = new DriverControls();
+    coDriverControls = new CoDriverControls();
+
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,
       driverControls::getLeftY,
