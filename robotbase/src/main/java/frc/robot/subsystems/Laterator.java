@@ -1,21 +1,23 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Millisecond;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Rotations;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.LATERATOR;
@@ -24,7 +26,7 @@ public class Laterator extends SubsystemBase {
 
   private SparkMax m_motor;
 
-  private SparkClosedLoopController m_ClosedLoopController;
+  private ProfiledPIDController m_PIDController;
   private RelativeEncoder m_encoder;
 
   private DigitalInput m_hallEffectSensor;
@@ -43,7 +45,14 @@ public class Laterator extends SubsystemBase {
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
-    m_ClosedLoopController = m_motor.getClosedLoopController();
+
+    m_PIDController = new ProfiledPIDController(
+      LATERATOR.MOTOR_P,
+      LATERATOR.MOTOR_I,
+      LATERATOR.MOTOR_D,
+      new TrapezoidProfile.Constraints(LATERATOR.MAX_VEL, LATERATOR.MAX_ACCEL)
+    );
+
     m_encoder = m_motor.getEncoder();
 
     m_hallEffectSensor = new DigitalInput(
@@ -64,6 +73,10 @@ public class Laterator extends SubsystemBase {
     m_motor.set(axisSpeed.times(LATERATOR.AXIS_MAX_SPEED).in(Percent));
   }
 
+  public void updateMotor() {
+    m_motor.set(m_PIDController.calculate(m_encoder.getPosition()));
+  }
+
   public void stop() {
     m_targetRotations = Rotations.of(Double.NaN);
     m_motor.set(0);
@@ -71,10 +84,7 @@ public class Laterator extends SubsystemBase {
 
   private void setTargetRotations(Angle targetRotations) {
     m_targetRotations = targetRotations;
-    m_ClosedLoopController.setReference(
-      m_targetRotations.in(Rotations),
-      ControlType.kPosition
-    );
+    m_PIDController.setGoal(m_targetRotations.in(Rotations));
   }
 
   private Angle getRotations() {
@@ -111,10 +121,25 @@ public class Laterator extends SubsystemBase {
   }
 
   private Distance rotationsToDistance(Angle rotations) {
-    return null; // TODO: math this
+    return (
+      LATERATOR.OUTPUT_PULLEY_CIRCUMFERENCE.times(
+        rotations.div(LATERATOR.GEAR_RATIO).in(Rotations)
+      )
+    );
   }
 
   private Angle DistanceToRotations(Distance distance) {
-    return null; // TODO: math this
+    return Rotations.of(
+      distance
+        .div(LATERATOR.OUTPUT_PULLEY_CIRCUMFERENCE)
+        .times(LATERATOR.GEAR_RATIO)
+        .magnitude()
+    );
+  }
+
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Rotations", getRotations().in(Rotations));
+    SmartDashboard.putNumber("Distance", getDistance().in(Inches));
   }
 }
