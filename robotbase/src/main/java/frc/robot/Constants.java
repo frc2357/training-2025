@@ -3,7 +3,6 @@ package frc.robot;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -11,6 +10,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import frc.robot.generated.TunerConstants;
@@ -113,9 +113,9 @@ public final class Constants {
       .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
 
-    public static final double MOTOR_P = 0;
+    public static final double MOTOR_P = 0.1;
     public static final double MOTOR_I = 0;
-    public static final double MOTOR_D = 0;
+    public static final double MOTOR_D = 0.01;
     public static final double MOTOR_FF = 0;
     public static final double MAX_ACCEL = 0;
     public static final double MAX_VEL = 0;
@@ -127,13 +127,25 @@ public final class Constants {
 
     public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
 
-    public static final MAXMotionConfig MAX_MOTION_CONFIG =
-      CLOSED_LOOP_CONFIG.maxMotion
-        .allowedClosedLoopError(MAX_ALLOWED_ERROR.in(Units.Rotations))
-        .maxAcceleration(MAX_ACCEL)
-        .maxVelocity(MAX_VEL);
-
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+
+    public static final double GEAR_RATIO = 15;
+    public static final Distance OUTPUT_PULLEY_PITCH_DIAMETER =
+      Units.Millimeters.of(46.188);
+    public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
+      OUTPUT_PULLEY_PITCH_DIAMETER.times(Math.PI);
+
+    public static class SETPOINT {
+
+      public static final Distance L4 = Units.Feet.of(0);
+      public static final Distance L3 = Units.Feet.of(0);
+      public static final Distance L2 = Units.Feet.of(0);
+      public static final Distance L1 = Units.Feet.of(0);
+
+      public static final Distance INTAKE = Units.Feet.of(0);
+      public static final Distance GROUND = Units.Feet.of(0);
+      public static final Distance TRAVEL = Units.Feet.of(0);
+    }
   }
 }

@@ -4,11 +4,14 @@ import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
+import frc.robot.Robot;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
+import frc.robot.commands.laterator.LateratorMoveToDistance;
 import frc.robot.controls.util.RumbleInterface;
 
 public class CoDriverControls implements RumbleInterface {
@@ -24,7 +27,20 @@ public class CoDriverControls implements RumbleInterface {
 
   public void mapControls() {
     m_controller.x().onTrue(new LateratorAxis(this::getLeftX));
+    m_controller
+      .x()
+      .and(m_controller.povUp())
+      .onTrue(new LateratorMoveToDistance(Constants.LATERATOR.SETPOINT.L3));
 
+    m_controller
+      .x()
+      .and(m_controller.povRight())
+      .onTrue(new InstantCommand(() -> Robot.laterator.setZero()));
+
+    m_controller
+      .x()
+      .and(m_controller.povDown())
+      .onTrue(new LateratorMoveToDistance(Constants.LATERATOR.SETPOINT.L2));
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
