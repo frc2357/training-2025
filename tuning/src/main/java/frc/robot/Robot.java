@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Laterator;
 
 /**
@@ -20,6 +21,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public Laterator laterator = new Laterator();
+  public Elevator elevator = new Elevator();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -37,6 +39,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     laterator.periodic();
+
+    elevator.periodic();
   }
 
   /**
