@@ -6,8 +6,10 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Time;
 import frc.robot.generated.TunerConstants;
@@ -44,6 +46,9 @@ public final class Constants {
     public static final int FRONT_RIGHT_ENCODER = 20;
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
+
+    public static final int ELEVATOR_LEFT_MOTOR = 23;
+    public static final int ELEVATOR_RIGHT_MOTOR = 24;
 
     public static final int CORAL_RUNNER_MOTOR = 29;
     public static final int ALGAE_KNOCKER_MOTOR = 33;
@@ -103,5 +108,50 @@ public final class Constants {
       .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
     public static final Dimensionless DE_ALGAE_SPEED = Units.Percent.of(50);
+  }
+
+  public static class ELEVATOR {
+
+    public static final SparkBaseConfig LEFT_MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(12)
+      .smartCurrentLimit(40, 40);
+
+    public static final SparkBaseConfig RIGHT_MOTOR_CONFIG =
+      new SparkMaxConfig()
+        .apply(LEFT_MOTOR_CONFIG)
+        .follow(CAN_ID.ELEVATOR_LEFT_MOTOR, true);
+
+    public static final double MOTOR_P = 0.1;
+    public static final double MOTOR_I = 0;
+    public static final double MOTOR_D = 0.01;
+    public static final double MOTOR_FF = 0;
+    public static final double MAX_ACCEL = 0;
+    public static final double MAX_VEL = 0;
+
+    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
+
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+
+    public static final double GEAR_RATIO = (38.0 / 14.0) * 2.0;
+
+    public static final Distance HTD5_PULLEY_PITCH = Units.Millimeters.of(5);
+    public static final double OUTPUT_PULLEY_NUMBER_OF_TEETH = 28;
+    public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
+      HTD5_PULLEY_PITCH.times(OUTPUT_PULLEY_NUMBER_OF_TEETH);
+
+    public static class SETPOINT {
+
+      public static final Distance L4 = Units.Feet.of(0);
+      public static final Distance L3 = Units.Feet.of(0);
+      public static final Distance L2 = Units.Feet.of(0);
+      public static final Distance L1 = Units.Feet.of(0);
+
+      public static final Distance INTAKE = Units.Feet.of(0);
+      public static final Distance GROUND = Units.Feet.of(0);
+      public static final Distance TRAVEL = Units.Feet.of(0);
+    }
   }
 }
