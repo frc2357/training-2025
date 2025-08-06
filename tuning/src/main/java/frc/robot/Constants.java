@@ -4,7 +4,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
@@ -101,7 +100,7 @@ public final class Constants {
     public static final double MAX_ACCEL = 0;
     public static final double MAX_VEL = 0;
 
-    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(90);
+    public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.5);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
