@@ -58,6 +58,8 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("MaxAcc", MAX_ACCEL);
     SmartDashboard.putNumber("Target Distance", 0);
     SmartDashboard.putNumber("Voltage", 0);
+    SmartDashboard.putNumber("PID_Setpoint_Position", 0);
+    SmartDashboard.putNumber("PID_Setpoint_Velocity", 0);
 
     m_left_Motor = new SparkMax(
       Constants.CAN_ID.ELEVATOR_LEFT_MOTOR,
@@ -120,11 +122,6 @@ public class Elevator extends SubsystemBase {
     return Rotations.of(m_encoder.getPosition());
   }
 
-  private boolean isAtTargetRotations() {
-    return getRotations()
-      .isNear(m_targetRotations, Constants.ELEVATOR.MAX_ALLOWED_ERROR);
-  }
-
   public void setTargetDistance(Distance targetDistance) {
     setTargetRotations(distanceToRotations(targetDistance));
   }
@@ -134,7 +131,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean isAtTargetDistance() {
-    return isAtTargetRotations();
+    return getDistance()
+      .isNear(
+        rotationsToDistance(m_targetRotations),
+        Constants.ELEVATOR.MAX_ALLOWED_ERROR.in(Inches)
+      );
   }
 
   public void setZero() {
@@ -168,8 +169,16 @@ public class Elevator extends SubsystemBase {
     SmartDashboard.putNumber("Distance", getDistance().in(Inches));
     SmartDashboard.putNumber("Velocity", m_encoder.getVelocity());
     SmartDashboard.putNumber("Voltage", motorVoltage().in(Volts));
+    SmartDashboard.putNumber(
+      "PID_Setpoint_Position",
+      m_PIDController.getSetpoint().position
+    );
+    SmartDashboard.putNumber(
+      "PID_Setpoint_Velocity",
+      m_PIDController.getSetpoint().velocity
+    );
 
-    SmartDashboard.putBoolean("Is At Target", isAtTargetRotations());
+    SmartDashboard.putBoolean("Is At Target", isAtTargetDistance());
 
     Distance target_Distance = Inches.of(
       SmartDashboard.getNumber("Target Distance", 0)
