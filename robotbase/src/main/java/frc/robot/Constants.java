@@ -7,7 +7,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
@@ -202,10 +201,10 @@ public final class Constants {
 
     public static class SETPOINT {
 
-      public static final Distance L4 = Units.Feet.of(0);
-      public static final Distance L3 = Units.Feet.of(0);
-      public static final Distance L2 = Units.Feet.of(0);
-      public static final Distance L1 = Units.Feet.of(0);
+      public static final Distance L1 = Units.Inches.of(1);
+      public static final Distance L2 = Units.Inches.of(8.43);
+      public static final Distance L3 = Units.Inches.of(24.189);
+      public static final Distance L4 = Units.Inches.of(49.5);
 
       public static final Distance INTAKE = Units.Feet.of(0);
       public static final Distance GROUND = Units.Feet.of(0);
