@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
@@ -30,6 +31,12 @@ public class Elevator extends SubsystemBase {
   private RelativeEncoder m_encoder;
 
   private Angle m_targetRotations = Rotations.of(Double.NaN);
+
+  private ElevatorFeedforward MOTOR_FF = new ElevatorFeedforward(
+    Constants.ELEVATOR.MOTOR_KS,
+    Constants.ELEVATOR.MOTOR_KG,
+    Constants.ELEVATOR.MOTOR_KV
+  );
 
   public Elevator() {
     m_left_Motor = new SparkMax(
@@ -73,7 +80,10 @@ public class Elevator extends SubsystemBase {
   }
 
   public void updateMotor() {
-    m_left_Motor.set(m_PIDController.calculate(m_encoder.getPosition()));
+    m_left_Motor.setVoltage(
+      m_PIDController.calculate(m_encoder.getPosition()) +
+      MOTOR_FF.calculate(m_PIDController.getSetpoint().velocity)
+    );
   }
 
   public void stop() {
@@ -90,21 +100,20 @@ public class Elevator extends SubsystemBase {
     return Rotations.of(m_encoder.getPosition());
   }
 
-  private boolean isAtTargetRotations() {
-    return getRotations()
-      .isNear(m_targetRotations, Constants.ELEVATOR.MAX_ALLOWED_ERROR);
+  public boolean isAtTarget() {
+    return getDistance()
+      .isNear(
+        rotationsToDistance(m_targetRotations),
+        Constants.ELEVATOR.MAX_ALLOWED_ERROR
+      );
   }
 
-  public void SetTargetDistance(Distance targetDistance) {
-    setTargetRotations(DistanceToRotations(targetDistance));
+  public void setTargetDistance(Distance targetDistance) {
+    setTargetRotations(distanceToRotations(targetDistance));
   }
 
   public Distance getDistance() {
     return rotationsToDistance(getRotations());
-  }
-
-  public boolean isAtTargetDistance() {
-    return isAtTargetRotations();
   }
 
   public void setZero() {
@@ -119,7 +128,7 @@ public class Elevator extends SubsystemBase {
     );
   }
 
-  private Angle DistanceToRotations(Distance distance) {
+  private Angle distanceToRotations(Distance distance) {
     return Rotations.of(
       distance
         .div(ELEVATOR.OUTPUT_PULLEY_CIRCUMFERENCE)

@@ -17,6 +17,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaeKnocker;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralRunner;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Laterator;
 
 /**
@@ -34,10 +35,10 @@ public class Robot extends TimedRobot {
   public static CommandSwerveDrivetrain swerve;
 
   private static DriverControls driverControls;
-  private static CoDriverControls CodriverControls;
-
+  public static CoDriverControls codriverControls;
   public static CoralRunner coralRunner;
   public static AlgaeKnocker algaeKnocker;
+  public static Elevator elevator;
   public static Laterator laterator;
 
   private final Telemetry logger = new Telemetry(
@@ -53,10 +54,11 @@ public class Robot extends TimedRobot {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
     algaeKnocker = new AlgaeKnocker();
+    elevator = new Elevator();
     laterator = new Laterator();
 
     driverControls = new DriverControls();
-    CodriverControls = new CoDriverControls();
+    codriverControls = new CoDriverControls();
 
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,

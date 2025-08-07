@@ -7,7 +7,6 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
@@ -59,14 +58,14 @@ public final class Constants {
 
   public static final class CONTROLLER {
 
-    public static final int DRIVE_CONTROLLER_PORT = 1;
-    public static final double DRIVE_CONTROLLER_DEADBAND = 0.01;
+    public static final int DRIVER_CONTROLLER_PORT = 1;
+    public static final double DRIVER_CONTROLLER_DEADBAND = 0.01;
     public static final int CODRIVER_CONTROLLER_PORT = 0;
-    public static final double CODRIVE_CONTROLLER_DEADBAND = 0.025;
-    public static final double DRIVE_RUMBLE_INTENSITY = .5;
-    public static final double CODRIVE_RUMBLE_INTENSITY = .5;
-    public static final double DRIVE_RUMBLE_SECONDS = 2;
-    public static final double CODRIVE_RUMBLE_SECONDS = 2;
+    public static final double CODRIVER_CONTROLLER_DEADBAND = 0.025;
+    public static final double DRIVER_RUMBLE_INTENSITY = .5;
+    public static final double CODRIVER_RUMBLE_INTENSITY = .5;
+    public static final double DRIVER_RUMBLE_SECONDS = 2;
+    public static final double CODRIVER_RUMBLE_SECONDS = 2;
     public static final double JOYSTICK_RAMP_EXPONENT = 1;
   }
 
@@ -131,14 +130,18 @@ public final class Constants {
         .apply(LEFT_MOTOR_CONFIG)
         .follow(CAN_ID.ELEVATOR_LEFT_MOTOR, true);
 
-    public static final double MOTOR_P = 0.1;
+    public static final double MOTOR_P = 1;
     public static final double MOTOR_I = 0;
-    public static final double MOTOR_D = 0.01;
+    public static final double MOTOR_D = 0.1;
     public static final double MOTOR_FF = 0;
     public static final double MAX_ACCEL = 0;
     public static final double MAX_VEL = 0;
 
-    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
+    public static final double MOTOR_KS = 0;
+    public static final double MOTOR_KG = 0.67;
+    public static final double MOTOR_KV = 0.1;
+
+    public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.5);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
@@ -152,10 +155,10 @@ public final class Constants {
 
     public static class SETPOINT {
 
-      public static final Distance L4 = Units.Feet.of(0);
-      public static final Distance L3 = Units.Feet.of(0);
-      public static final Distance L2 = Units.Feet.of(0);
-      public static final Distance L1 = Units.Feet.of(0);
+      public static final Distance L1 = Units.Inches.of(1);
+      public static final Distance L2 = Units.Inches.of(8.43);
+      public static final Distance L3 = Units.Inches.of(24.189);
+      public static final Distance L4 = Units.Inches.of(49.5);
 
       public static final Distance INTAKE = Units.Feet.of(0);
       public static final Distance GROUND = Units.Feet.of(0);

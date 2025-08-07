@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
+import frc.robot.commands.Elevator.ElevatorSetpoint;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
@@ -18,7 +18,7 @@ public class DriverControls implements RumbleInterface {
   private CommandXboxController m_controller;
 
   public DriverControls() {
-    m_controller = new CommandXboxController(CONTROLLER.DRIVE_CONTROLLER_PORT);
+    m_controller = new CommandXboxController(CONTROLLER.DRIVER_CONTROLLER_PORT);
     mapControls();
   }
 
@@ -37,8 +37,17 @@ public class DriverControls implements RumbleInterface {
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
 
     m_controller
+      .a()
+      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L1));
+    m_controller
       .b()
-      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
+      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L2));
+    m_controller
+      .x()
+      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L3));
+    m_controller
+      .y()
+      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L4));
   }
 
   public Dimensionless getRightX() {
@@ -74,7 +83,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.DRIVER_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value
