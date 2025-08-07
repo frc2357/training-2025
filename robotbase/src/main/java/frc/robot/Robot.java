@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.CORAL_RUNNER;
 import frc.robot.commands.drive.DefaultDrive;
+import frc.robot.controls.CoDriverControls;
 import frc.robot.controls.DriverControls;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaeKnocker;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralRunner;
+import frc.robot.subsystems.Elevator;
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -31,8 +33,10 @@ public class Robot extends TimedRobot {
 
   public static CommandSwerveDrivetrain swerve;
   private static DriverControls driverControls;
+  public static CoDriverControls codriverControls;
   public static CoralRunner coralRunner;
   public static AlgaeKnocker algaeKnocker;
+  public static Elevator elevator;
 
   private final Telemetry logger = new Telemetry(
     Constants.SWERVE.MAX_SPEED.in(Units.MetersPerSecond)
@@ -47,7 +51,9 @@ public class Robot extends TimedRobot {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
     algaeKnocker = new AlgaeKnocker();
+    elevator = new Elevator();
     driverControls = new DriverControls();
+    codriverControls = new CoDriverControls();
 
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,

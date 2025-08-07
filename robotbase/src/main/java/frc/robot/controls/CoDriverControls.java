@@ -4,30 +4,28 @@ import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.Elevator.ElevatorSetpoint;
+import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
+import frc.robot.commands.Elevator.ElevatorAxis;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
-import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
 
-public class DriverControls implements RumbleInterface {
+public class CoDriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
 
-  public DriverControls() {
-    m_controller = new CommandXboxController(CONTROLLER.DRIVER_CONTROLLER_PORT);
+  public CoDriverControls() {
+    m_controller = new CommandXboxController(
+      CONTROLLER.CODRIVER_CONTROLLER_PORT
+    );
     mapControls();
   }
 
   public void mapControls() {
-    m_controller
-      .start()
-      .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
-    m_controller.back().onTrue(new FlipPerspective());
-
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
@@ -36,18 +34,18 @@ public class DriverControls implements RumbleInterface {
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
 
-    m_controller
-      .a()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L1));
+    m_controller.x().onTrue(new ElevatorAxis(this::getLeftY));
+
     m_controller
       .b()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L2));
+      .onTrue(
+        new InstantCommand(() -> {
+          Robot.elevator.setZero();
+        })
+      );
     m_controller
-      .x()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L3));
-    m_controller
-      .y()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L4));
+      .b()
+      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public double getRightX() {
@@ -58,8 +56,8 @@ public class DriverControls implements RumbleInterface {
     return modifyAxis(m_controller.getLeftX());
   }
 
-  public double getLeftY() {
-    return modifyAxis(m_controller.getLeftY());
+  public Dimensionless getLeftY() {
+    return Percent.of(modifyAxis(-m_controller.getLeftY()));
   }
 
   public Dimensionless getRightTriggerAxis() {
@@ -83,7 +81,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.DRIVER_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.CODRIVER_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value
