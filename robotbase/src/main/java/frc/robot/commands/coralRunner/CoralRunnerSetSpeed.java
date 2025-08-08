@@ -4,11 +4,11 @@ import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class CoralRunnerSpeed extends Command {
+public class CoralRunnerSetSpeed extends Command {
 
   Dimensionless m_speed;
 
-  public CoralRunnerSpeed(Dimensionless speed) {
+  public CoralRunnerSetSpeed(Dimensionless speed) {
     addRequirements(Robot.coralRunner);
     m_speed = speed;
   }

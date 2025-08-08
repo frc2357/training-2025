@@ -4,11 +4,11 @@ import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class LateratorSpeed extends Command {
+public class LateratorSetSpeed extends Command {
 
   Dimensionless m_speed;
 
-  public LateratorSpeed(Dimensionless speed) {
+  public LateratorSetSpeed(Dimensionless speed) {
     addRequirements(Robot.laterator);
     m_speed = speed;
   }
