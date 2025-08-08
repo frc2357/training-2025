@@ -47,7 +47,7 @@ public class CoDriverControls implements RumbleInterface {
 
     m_controller
       .leftTrigger()
-      .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
+      .whileTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
   }
 
   public Dimensionless getRightX() {

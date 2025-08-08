@@ -91,21 +91,17 @@ public class Laterator extends SubsystemBase {
     return Rotations.of(m_encoder.getPosition());
   }
 
-  private boolean isAtTargetRotations() {
+  public boolean isAtTarget() {
     return getRotations()
       .isNear(m_targetRotations, Constants.LATERATOR.MAX_ALLOWED_ERROR);
   }
 
-  public void SetTargetDistance(Distance targetDistance) {
-    setTargetRotations(DistanceToRotations(targetDistance));
+  public void setTargetDistance(Distance targetDistance) {
+    setTargetRotations(distanceToRotations(targetDistance));
   }
 
   public Distance getDistance() {
     return rotationsToDistance(getRotations());
-  }
-
-  public boolean isAtTargetDistance() {
-    return isAtTargetRotations();
   }
 
   public void calculateHallEffect() {
@@ -128,7 +124,7 @@ public class Laterator extends SubsystemBase {
     );
   }
 
-  private Angle DistanceToRotations(Distance distance) {
+  private Angle distanceToRotations(Distance distance) {
     return Rotations.of(
       distance
         .div(LATERATOR.OUTPUT_PULLEY_CIRCUMFERENCE)
