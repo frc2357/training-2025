@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,7 +34,8 @@ public class Laterator extends SubsystemBase {
   private Debouncer m_debouncer;
   private boolean m_isHallEffectTriggered;
 
-  private Angle m_targetRotations = Rotations.of(Double.NaN);
+  private MutAngle m_targetRotations = Rotations.mutable(Double.NaN);
+  private MutAngle m_encoderAngle = Rotations.mutable(0);
 
   public Laterator() {
     m_motor = new SparkMax(
@@ -64,31 +66,31 @@ public class Laterator extends SubsystemBase {
   }
 
   public void setSpeed(Dimensionless speed) {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_motor.set(speed.in(Percent));
   }
 
   public void setAxisSpeed(Dimensionless axisSpeed) {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_motor.set(axisSpeed.times(LATERATOR.AXIS_MAX_SPEED).in(Percent));
   }
 
   public void updateMotor() {
-    m_motor.set(m_PIDController.calculate(m_encoder.getPosition()));
+    m_motor.set(m_PIDController.calculate(getRotations().in(Rotations)));
   }
 
   public void stop() {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_motor.set(0);
   }
 
   private void setTargetRotations(Angle targetRotations) {
-    m_targetRotations = targetRotations;
+    m_targetRotations.mut_replace(targetRotations);
     m_PIDController.setGoal(m_targetRotations.in(Rotations));
   }
 
   private Angle getRotations() {
-    return Rotations.of(m_encoder.getPosition());
+    return m_encoderAngle.mut_replace(m_encoder.getPosition(), Rotations);
   }
 
   public boolean isAtTarget() {
