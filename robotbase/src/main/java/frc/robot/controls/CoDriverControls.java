@@ -3,6 +3,7 @@ package frc.robot.controls;
 import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.MutDimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,6 +18,10 @@ import frc.robot.controls.util.RumbleInterface;
 public class CoDriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
+
+  private MutDimensionless m_rightTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftY = Percent.mutable(0);
 
   public CoDriverControls() {
     m_controller = new CommandXboxController(
@@ -62,15 +67,21 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   public Dimensionless getLeftY() {
-    return Percent.of(modifyAxis(m_controller.getLeftY()));
+    return m_rightTrigger.mut_replace(-m_controller.getLeftY(), Percent);
   }
 
   public Dimensionless getRightTriggerAxis() {
-    return Percent.of(-m_controller.getRightTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      -m_controller.getRightTriggerAxis(),
+      Percent
+    );
   }
 
   public Dimensionless getLeftTriggerAxis() {
-    return Percent.of(m_controller.getLeftTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      m_controller.getLeftTriggerAxis(),
+      Percent
+    );
   }
 
   private double deadband(double value, double deadband) {

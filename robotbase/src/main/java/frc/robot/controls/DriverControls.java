@@ -3,6 +3,7 @@ package frc.robot.controls;
 import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.MutDimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -16,6 +17,8 @@ import frc.robot.controls.util.RumbleInterface;
 public class DriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
+  private MutDimensionless m_rightTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftTrigger = Percent.mutable(0);
 
   public DriverControls() {
     m_controller = new CommandXboxController(CONTROLLER.DRIVER_CONTROLLER_PORT);
@@ -63,11 +66,17 @@ public class DriverControls implements RumbleInterface {
   }
 
   public Dimensionless getRightTriggerAxis() {
-    return Percent.of(-m_controller.getRightTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      -m_controller.getRightTriggerAxis(),
+      Percent
+    );
   }
 
   public Dimensionless getLeftTriggerAxis() {
-    return Percent.of(m_controller.getLeftTriggerAxis());
+    return m_leftTrigger.mut_replace(
+      m_controller.getLeftTriggerAxis(),
+      Percent
+    );
   }
 
   private double deadband(double value, double deadband) {

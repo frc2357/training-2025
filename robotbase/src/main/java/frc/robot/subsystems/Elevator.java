@@ -16,6 +16,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutVoltage;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +32,9 @@ public class Elevator extends SubsystemBase {
   private ProfiledPIDController m_PIDController;
   private RelativeEncoder m_encoder;
 
-  private Angle m_targetRotations = Rotations.of(Double.NaN);
+  private MutAngle m_targetRotations = Rotations.mutable(Double.NaN);
+  private MutAngle m_motorAngle = Rotations.mutable(0);
+  private MutVoltage m_motorVoltage = Volts.mutable(0);
 
   private ElevatorFeedforward MOTOR_FF = new ElevatorFeedforward(
     Constants.ELEVATOR.MOTOR_KS,
@@ -70,12 +74,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setSpeed(Dimensionless speed) {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_left_Motor.set(speed.in(Percent));
   }
 
   public void setAxisSpeed(Dimensionless axisSpeed) {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_left_Motor.set(axisSpeed.times(ELEVATOR.AXIS_MAX_SPEED).in(Percent));
   }
 
@@ -87,17 +91,17 @@ public class Elevator extends SubsystemBase {
   }
 
   public void stop() {
-    m_targetRotations = Rotations.of(Double.NaN);
+    m_targetRotations.mut_replace(Double.NaN, Rotations);
     m_left_Motor.set(0);
   }
 
   private void setTargetRotations(Angle targetRotations) {
-    m_targetRotations = targetRotations;
+    m_targetRotations.mut_replace(targetRotations);
     m_PIDController.setGoal(m_targetRotations.in(Rotations));
   }
 
   private Angle getRotations() {
-    return Rotations.of(m_encoder.getPosition());
+    return m_motorAngle.mut_replace(m_encoder.getPosition(), Rotations);
   }
 
   public boolean isAtTarget() {
@@ -138,7 +142,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Voltage motorVoltage() {
-    return Volts.of(m_left_Motor.getBusVoltage());
+    return m_motorVoltage.mut_replace(m_left_Motor.getBusVoltage(), Volts);
   }
 
   @Override
