@@ -3,19 +3,25 @@ package frc.robot.commands.laterator;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import java.util.function.Supplier;
 
-public class LateratorMoveToDistance extends Command {
+public class LateratorSetpoint extends Command {
 
-  Distance m_distance;
+  Supplier<Distance> m_setpoint;
 
-  public LateratorMoveToDistance(Distance distance) {
+  public LateratorSetpoint(Distance setpoint) {
     addRequirements(Robot.laterator);
-    m_distance = distance;
+    m_setpoint = () -> setpoint;
+  }
+
+  public LateratorSetpoint(Supplier<Distance> setpoint) {
+    addRequirements(Robot.laterator);
+    m_setpoint = setpoint;
   }
 
   @Override
   public void initialize() {
-    Robot.laterator.SetTargetDistance(m_distance);
+    Robot.laterator.setTargetDistance(m_setpoint.get());
   }
 
   @Override
@@ -25,7 +31,7 @@ public class LateratorMoveToDistance extends Command {
 
   @Override
   public boolean isFinished() {
-    return Robot.laterator.isAtTargetDistance();
+    return Robot.laterator.isAtTarget();
   }
 
   @Override
