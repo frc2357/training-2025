@@ -36,6 +36,7 @@ public class Laterator extends SubsystemBase {
 
   private MutAngle m_targetRotations = Rotations.mutable(Double.NaN);
   private MutAngle m_encoderAngle = Rotations.mutable(0);
+  private MutAngle m_distanceToRotations = Rotations.mutable(0);
 
   public Laterator() {
     m_motor = new SparkMax(
@@ -127,11 +128,12 @@ public class Laterator extends SubsystemBase {
   }
 
   private Angle distanceToRotations(Distance distance) {
-    return Rotations.of(
+    return m_distanceToRotations.mut_replace(
       distance
         .div(LATERATOR.OUTPUT_PULLEY_CIRCUMFERENCE)
         .times(LATERATOR.GEAR_RATIO)
-        .magnitude()
+        .magnitude(),
+      Rotations
     );
   }
 

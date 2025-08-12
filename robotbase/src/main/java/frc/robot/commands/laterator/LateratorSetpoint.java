@@ -20,12 +20,8 @@ public class LateratorSetpoint extends Command {
   }
 
   @Override
-  public void initialize() {
-    Robot.laterator.setTargetDistance(m_setpoint.get());
-  }
-
-  @Override
   public void execute() {
+    Robot.laterator.setTargetDistance(m_setpoint.get());
     Robot.laterator.updateMotor();
   }
 
