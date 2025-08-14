@@ -26,7 +26,7 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   public void mapControls() {
-    m_controller.x().onTrue(new LateratorAxis(this::getLeftX));
+    m_controller.x().whileTrue(new LateratorAxis(this::getLeftX));
     m_controller
       .x()
       .and(m_controller.povUp())
