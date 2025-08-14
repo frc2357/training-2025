@@ -22,12 +22,8 @@ public class ElevatorSetpoint extends Command {
   }
 
   @Override
-  public void initialize() {
-    Robot.elevator.setTargetDistance(m_setpoint.get());
-  }
-
-  @Override
   public void execute() {
+    Robot.elevator.setTargetDistance(m_setpoint.get());
     Robot.elevator.updateMotor();
   }
 
