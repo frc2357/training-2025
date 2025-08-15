@@ -5,16 +5,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import java.util.function.Supplier;
 
-public class LateratorSetpoint extends Command {
+public class LateratorSetDistance extends Command {
 
   Supplier<Distance> m_setpoint;
 
-  public LateratorSetpoint(Distance setpoint) {
+  public LateratorSetDistance(Distance setpoint) {
     addRequirements(Robot.laterator);
     m_setpoint = () -> setpoint;
   }
 
-  public LateratorSetpoint(Supplier<Distance> setpoint) {
+  public LateratorSetDistance(Supplier<Distance> setpoint) {
     addRequirements(Robot.laterator);
     m_setpoint = setpoint;
   }

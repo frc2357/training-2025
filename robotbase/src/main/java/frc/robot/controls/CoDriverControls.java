@@ -11,7 +11,7 @@ import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
-import frc.robot.commands.laterator.LateratorSetpoint;
+import frc.robot.commands.laterator.LateratorSetDistance;
 import frc.robot.controls.util.RumbleInterface;
 
 public class CoDriverControls implements RumbleInterface {
@@ -33,7 +33,7 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .x()
       .and(m_controller.povUp())
-      .onTrue(new LateratorSetpoint(Constants.LATERATOR.SETPOINT.L3));
+      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3));
 
     m_controller
       .x()
@@ -43,7 +43,7 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .x()
       .and(m_controller.povDown())
-      .onTrue(new LateratorSetpoint(Constants.LATERATOR.SETPOINT.L2));
+      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L2));
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
