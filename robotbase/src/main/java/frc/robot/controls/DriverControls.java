@@ -25,12 +25,12 @@ public class DriverControls implements RumbleInterface {
   public void mapControls() {
     m_controller
       .start()
-      .whileTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
+      .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
     m_controller.back().onTrue(new FlipPerspective());
 
     m_controller
       .rightTrigger()
-      .whileTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
+      .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
 
     m_controller
       .leftTrigger()
