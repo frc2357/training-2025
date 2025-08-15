@@ -4,30 +4,46 @@ import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
-import frc.robot.commands.drive.FlipPerspective;
+import frc.robot.commands.laterator.LateratorAxis;
+import frc.robot.commands.laterator.LateratorSetDistance;
 import frc.robot.controls.util.RumbleInterface;
 
-public class DriverControls implements RumbleInterface {
+public class CoDriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
 
-  public DriverControls() {
-    m_controller = new CommandXboxController(CONTROLLER.DRIVE_CONTROLLER_PORT);
+  public CoDriverControls() {
+    m_controller = new CommandXboxController(
+      CONTROLLER.CODRIVER_CONTROLLER_PORT
+    );
     mapControls();
   }
 
   public void mapControls() {
     m_controller
-      .start()
-      .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
-    m_controller.back().onTrue(new FlipPerspective());
+      .x()
+      .and(() -> getLeftX().gte(Percent.one()))
+      .onTrue(new LateratorAxis(this::getLeftX));
+    m_controller
+      .x()
+      .and(m_controller.povUp())
+      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3));
 
+    m_controller
+      .x()
+      .and(m_controller.povRight())
+      .onTrue(new InstantCommand(() -> Robot.laterator.setZero()));
+
+    m_controller
+      .x()
+      .and(m_controller.povDown())
+      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L2));
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
@@ -35,10 +51,6 @@ public class DriverControls implements RumbleInterface {
     m_controller
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
-
-    m_controller
-      .b()
-      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public Dimensionless getRightX() {
@@ -74,7 +86,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.CODRIVE_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value

@@ -1,21 +1,21 @@
-package frc.robot.commands.coralRunner;
+package frc.robot.commands.laterator;
 
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class CoralRunnerSpeed extends Command {
+public class LateratorSetSpeed extends Command {
 
   Dimensionless m_speed;
 
-  public CoralRunnerSpeed(Dimensionless speed) {
-    addRequirements(Robot.coralRunner);
+  public LateratorSetSpeed(Dimensionless speed) {
+    addRequirements(Robot.laterator);
     m_speed = speed;
   }
 
   @Override
   public void execute() {
-    Robot.coralRunner.setSpeed(m_speed);
+    Robot.laterator.setSpeed(m_speed);
   }
 
   @Override
@@ -25,6 +25,6 @@ public class CoralRunnerSpeed extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    Robot.coralRunner.stop();
+    Robot.laterator.stop();
   }
 }
