@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
+import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
+import frc.robot.commands.Elevator.ElevatorAxis;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
 import frc.robot.commands.laterator.LateratorSetDistance;
@@ -56,11 +58,27 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
+
+
+    m_controller.x().onTrue(new ElevatorAxis(this::getLeftY));
+
+    m_controller
+      .b()
+      .onTrue(
+        new InstantCommand(() -> {
+          Robot.elevator.setZero();
+        })
+      );
+    m_controller
+      .x()
+      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public Dimensionless getRightX() {
     return Percent.of(modifyAxis(m_controller.getRightX()));
   }
+
+\
 
   public Dimensionless getLeftX() {
     return Percent.of(modifyAxis(m_controller.getLeftX()));

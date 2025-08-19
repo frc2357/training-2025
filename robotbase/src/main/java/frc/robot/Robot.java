@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.SENSOR_PERIODIC;
+import frc.robot.commands.Elevator.ElevatorHold;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.CoDriverControls;
 import frc.robot.controls.DriverControls;
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private static Command m_defaultDrive;
+  private static Command m_elevatorHold;
 
   public static CommandSwerveDrivetrain swerve;
 
@@ -60,6 +62,8 @@ public class Robot extends TimedRobot {
     driverControls = new DriverControls();
     codriverControls = new CoDriverControls();
 
+    m_elevatorHold = new ElevatorHold();
+
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,
       driverControls::getLeftY,
@@ -76,8 +80,10 @@ public class Robot extends TimedRobot {
     );
 
     // TODO: add alliance-dependent pose reset on roborio startup
-    Robot.swerve.setDefaultCommand(m_defaultDrive);
 
+    Robot.elevator.setDefaultCommand(m_elevatorHold);
+
+    Robot.swerve.setDefaultCommand(m_defaultDrive);
     Robot.swerve.registerTelemetry(logger::telemeterize);
   }
 

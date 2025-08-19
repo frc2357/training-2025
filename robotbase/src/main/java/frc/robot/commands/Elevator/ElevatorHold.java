@@ -1,21 +1,18 @@
 package frc.robot.commands.Elevator;
 
-import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class ElevatorSpeed extends Command {
+public class ElevatorHold extends Command {
 
-  Dimensionless m_speed;
-
-  public ElevatorSpeed(Dimensionless speed) {
+  public ElevatorHold() {
     addRequirements(Robot.elevator);
-    m_speed = speed;
   }
 
   @Override
-  public void execute() {
-    Robot.elevator.setSpeed(m_speed);
+  public void initialize() {
+    Robot.elevator.setSpeed(Constants.ELEVATOR.HOLD_PERCENT_OUTPUT);
   }
 
   @Override

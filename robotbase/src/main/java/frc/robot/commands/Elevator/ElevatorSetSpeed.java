@@ -3,20 +3,19 @@ package frc.robot.commands.Elevator;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
-import java.util.function.Supplier;
 
-public class ElevatorAxis extends Command {
+public class ElevatorSetSpeed extends Command {
 
-  Supplier<Dimensionless> m_axisSpeed;
+  Dimensionless m_speed;
 
-  public ElevatorAxis(Supplier<Dimensionless> axisSpeed) {
+  public ElevatorSetSpeed(Dimensionless speed) {
     addRequirements(Robot.elevator);
-    m_axisSpeed = axisSpeed;
+    m_speed = speed;
   }
 
   @Override
-  public void execute() {
-    Robot.elevator.setAxisSpeed(m_axisSpeed.get());
+  public void initialize() {
+    Robot.elevator.setSpeed(m_speed);
   }
 
   @Override

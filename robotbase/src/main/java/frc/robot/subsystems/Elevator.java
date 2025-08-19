@@ -83,7 +83,7 @@ public class Elevator extends SubsystemBase {
     m_left_Motor.set(axisSpeed.times(ELEVATOR.AXIS_MAX_SPEED).in(Percent));
   }
 
-  public void updateMotor() {
+  public void updateMotorPIDs() {
     m_left_Motor.setVoltage(
       m_PIDController.calculate(m_encoder.getPosition()) +
       MOTOR_FF.calculate(m_PIDController.getSetpoint().velocity)

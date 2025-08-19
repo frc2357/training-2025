@@ -153,6 +153,8 @@ public final class Constants {
     public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
       HTD5_PULLEY_PITCH.times(OUTPUT_PULLEY_NUMBER_OF_TEETH);
 
+    public static final Dimensionless HOLD_PERCENT_OUTPUT = null; //TODO: Find this value
+
     public static class SETPOINT {
 
       public static final Distance L1 = Units.Inches.of(1);
@@ -160,9 +162,9 @@ public final class Constants {
       public static final Distance L3 = Units.Inches.of(24.189);
       public static final Distance L4 = Units.Inches.of(49.5);
 
-      public static final Distance INTAKE = Units.Feet.of(0);
-      public static final Distance GROUND = Units.Feet.of(0);
-      public static final Distance TRAVEL = Units.Feet.of(0);
+      public static final Distance INTAKE = Units.Feet.of(0); //TODO: Define;
+      public static final Distance GROUND = Units.Feet.of(0); //TODO: Define;
+      public static final Distance TRAVEL = Units.Feet.of(0); //TODO: Define;
     }
   }
 
