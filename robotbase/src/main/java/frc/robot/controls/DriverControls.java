@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.Elevator.ElevatorSetpoint;
+import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
@@ -41,16 +41,16 @@ public class DriverControls implements RumbleInterface {
 
     m_controller
       .a()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L1));
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L1));
     m_controller
       .b()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L2));
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L2));
     m_controller
       .x()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L3));
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L3));
     m_controller
       .y()
-      .onTrue(new ElevatorSetpoint(Constants.ELEVATOR.SETPOINT.L4));
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L4));
   }
 
   public Dimensionless getRightX() {
