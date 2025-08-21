@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Distance;
@@ -75,7 +76,7 @@ public class Elevator extends SubsystemBase {
 
   public void setSpeed(Dimensionless speed) {
     m_targetRotations.mut_replace(Double.NaN, Rotations);
-    m_left_Motor.set(speed.in(Percent));
+    m_left_Motor.set(speed.in(Units.Value));
   }
 
   public void setAxisSpeed(Dimensionless axisSpeed) {

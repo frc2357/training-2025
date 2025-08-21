@@ -9,9 +9,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
+import frc.robot.Constants.ELEVATOR;
 import frc.robot.Robot;
 import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
 import frc.robot.commands.Elevator.ElevatorAxis;
+import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
 import frc.robot.commands.laterator.LateratorSetDistance;
@@ -40,17 +42,30 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .x()
       .and(m_controller.povUp())
-      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3));
+      .onTrue(
+        new LateratorSetDistance(Constants.LATERATOR.SETPOINT.INTAKE).andThen(
+          new ElevatorSetDistance(ELEVATOR.SETPOINT.INTAKE)
+        )
+      );
 
     m_controller
       .x()
       .and(m_controller.povRight())
-      .onTrue(new InstantCommand(() -> Robot.laterator.setZero()));
+      .onTrue(
+        new InstantCommand(() -> {
+          Robot.laterator.setZero();
+          Robot.elevator.setZero();
+        })
+      );
 
     m_controller
       .x()
       .and(m_controller.povDown())
-      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L2));
+      .onTrue(
+        new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3).andThen(
+          new ElevatorSetDistance(ELEVATOR.SETPOINT.L3)
+        )
+      );
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
@@ -59,8 +74,7 @@ public class CoDriverControls implements RumbleInterface {
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
 
-
-    m_controller.x().onTrue(new ElevatorAxis(this::getLeftY));
+    m_controller.x().whileTrue(new ElevatorAxis(this::getLeftY));
 
     m_controller
       .b()
@@ -70,15 +84,13 @@ public class CoDriverControls implements RumbleInterface {
         })
       );
     m_controller
-      .x()
+      .y()
       .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public Dimensionless getRightX() {
     return Percent.of(modifyAxis(m_controller.getRightX()));
   }
-
-\
 
   public Dimensionless getLeftX() {
     return Percent.of(modifyAxis(m_controller.getLeftX()));
@@ -115,7 +127,7 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.CODRIVE_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.CODRIVER_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value

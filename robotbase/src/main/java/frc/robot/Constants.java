@@ -154,7 +154,7 @@ public final class Constants {
     public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
       HTD5_PULLEY_PITCH.times(OUTPUT_PULLEY_NUMBER_OF_TEETH);
 
-    public static final Dimensionless HOLD_PERCENT_OUTPUT = null; //TODO: Find this value
+    public static final Dimensionless HOLD_PERCENT_OUTPUT = Units.Percent.of(7); //TODO: Find this value
 
     public static class SETPOINT {
 
@@ -189,7 +189,7 @@ public final class Constants {
         .pidf(MOTOR_P, MOTOR_I, MOTOR_D, MOTOR_FF)
         .outputRange(-1, 1);
 
-    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
+    public static final Angle MAX_ALLOWED_ERROR = Units.Rotations.of(.5);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
@@ -202,14 +202,18 @@ public final class Constants {
 
     public static class SETPOINT {
 
-      public static final Distance L1 = Units.Inches.of(1);
-      public static final Distance L2 = Units.Inches.of(8.43);
-      public static final Distance L3 = Units.Inches.of(24.189);
-      public static final Distance L4 = Units.Inches.of(49.5);
-
-      public static final Distance INTAKE = Units.Feet.of(0); //TODO: Define;
-      public static final Distance GROUND = Units.Feet.of(0); //TODO: Define;
-      public static final Distance TRAVEL = Units.Feet.of(0); //TODO: Define;
+      public static final Distance INTAKE = Units.Inches.of(3);
+      public static final Distance HOME = Units.Inches.of(1);
+      public static final Distance MAX_SAFE_SCORING_EXTENSION = Units.Inches.of(
+        -1
+      );
+      public static final Distance L1 = Units.Inches.of(-2);
+      public static final Distance L2 = Units.Inches.of(-6.1);
+      public static final Distance L3 = Units.Inches.of(-6.1);
+      public static final Distance L4 = Units.Inches.of(-6.25);
+      public static final Distance FULL_SCORING_EXTENSION = Units.Inches.of(
+        -6.6
+      );
     }
   }
 }
