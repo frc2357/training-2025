@@ -3,12 +3,13 @@ package frc.robot.controls;
 import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.MutDimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
+import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
@@ -16,9 +17,11 @@ import frc.robot.controls.util.RumbleInterface;
 public class DriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
+  private MutDimensionless m_rightTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftTrigger = Percent.mutable(0);
 
   public DriverControls() {
-    m_controller = new CommandXboxController(CONTROLLER.DRIVE_CONTROLLER_PORT);
+    m_controller = new CommandXboxController(CONTROLLER.DRIVER_CONTROLLER_PORT);
     mapControls();
   }
 
@@ -37,8 +40,17 @@ public class DriverControls implements RumbleInterface {
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
 
     m_controller
+      .a()
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L1));
+    m_controller
       .b()
-      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L2));
+    m_controller
+      .x()
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L3));
+    m_controller
+      .y()
+      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L4));
   }
 
   public Dimensionless getRightX() {
@@ -54,11 +66,17 @@ public class DriverControls implements RumbleInterface {
   }
 
   public Dimensionless getRightTriggerAxis() {
-    return Percent.of(-m_controller.getRightTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      -m_controller.getRightTriggerAxis(),
+      Percent
+    );
   }
 
   public Dimensionless getLeftTriggerAxis() {
-    return Percent.of(m_controller.getLeftTriggerAxis());
+    return m_leftTrigger.mut_replace(
+      m_controller.getLeftTriggerAxis(),
+      Percent
+    );
   }
 
   private double deadband(double value, double deadband) {
@@ -74,7 +92,7 @@ public class DriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.DRIVER_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value

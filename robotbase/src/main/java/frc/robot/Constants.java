@@ -48,6 +48,9 @@ public final class Constants {
     public static final int BACK_LEFT_ENCODER = 21;
     public static final int BACK_RIGHT_ENCODER = 22;
 
+    public static final int ELEVATOR_LEFT_MOTOR = 23;
+    public static final int ELEVATOR_RIGHT_MOTOR = 24;
+
     public static final int CORAL_RUNNER_MOTOR = 29;
     public static final int ALGAE_KNOCKER_MOTOR = 33;
 
@@ -56,14 +59,14 @@ public final class Constants {
 
   public static final class CONTROLLER {
 
-    public static final int DRIVE_CONTROLLER_PORT = 1;
-    public static final double DRIVE_CONTROLLER_DEADBAND = 0.01;
+    public static final int DRIVER_CONTROLLER_PORT = 1;
+    public static final double DRIVER_CONTROLLER_DEADBAND = 0.01;
     public static final int CODRIVER_CONTROLLER_PORT = 0;
-    public static final double CODRIVE_CONTROLLER_DEADBAND = 0.025;
-    public static final double DRIVE_RUMBLE_INTENSITY = .5;
-    public static final double CODRIVE_RUMBLE_INTENSITY = .5;
-    public static final double DRIVE_RUMBLE_SECONDS = 2;
-    public static final double CODRIVE_RUMBLE_SECONDS = 2;
+    public static final double CODRIVER_CONTROLLER_DEADBAND = 0.025;
+    public static final double DRIVER_RUMBLE_INTENSITY = .5;
+    public static final double CODRIVER_RUMBLE_INTENSITY = .5;
+    public static final double DRIVER_RUMBLE_SECONDS = 2;
+    public static final double CODRIVER_RUMBLE_SECONDS = 2;
     public static final double JOYSTICK_RAMP_EXPONENT = 1;
   }
 
@@ -115,6 +118,57 @@ public final class Constants {
     public static final Dimensionless DE_ALGAE_SPEED = Units.Percent.of(50);
   }
 
+  public static class ELEVATOR {
+
+    public static final SparkBaseConfig LEFT_MOTOR_CONFIG = new SparkMaxConfig()
+      .idleMode(IdleMode.kBrake)
+      .openLoopRampRate(.25)
+      .voltageCompensation(12)
+      .smartCurrentLimit(40, 40);
+
+    public static final SparkBaseConfig RIGHT_MOTOR_CONFIG =
+      new SparkMaxConfig()
+        .apply(LEFT_MOTOR_CONFIG)
+        .follow(CAN_ID.ELEVATOR_LEFT_MOTOR, true);
+
+    public static final double MOTOR_P = 1;
+    public static final double MOTOR_I = 0;
+    public static final double MOTOR_D = 0.1;
+    public static final double MOTOR_FF = 0;
+    public static final double MAX_ACCEL = 0;
+    public static final double MAX_VEL = 0;
+
+    public static final double MOTOR_KS = 0;
+    public static final double MOTOR_KG = 0.67;
+    public static final double MOTOR_KV = 0.1;
+
+    public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.5);
+
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+
+    public static final double GEAR_RATIO = (38.0 / 14.0) * 2.0;
+
+    public static final Distance HTD5_PULLEY_PITCH = Units.Millimeters.of(5);
+    public static final double OUTPUT_PULLEY_NUMBER_OF_TEETH = 28;
+    public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
+      HTD5_PULLEY_PITCH.times(OUTPUT_PULLEY_NUMBER_OF_TEETH);
+
+    public static final Dimensionless HOLD_PERCENT_OUTPUT = Units.Percent.of(7); //TODO: Find this value
+
+    public static class SETPOINT {
+
+      public static final Distance L1 = Units.Inches.of(1);
+      public static final Distance L2 = Units.Inches.of(8.43);
+      public static final Distance L3 = Units.Inches.of(24.189);
+      public static final Distance L4 = Units.Inches.of(49.5);
+
+      public static final Distance INTAKE = Units.Feet.of(0); //TODO: Define;
+      public static final Distance GROUND = Units.Feet.of(0); //TODO: Define;
+      public static final Distance TRAVEL = Units.Feet.of(0); //TODO: Define;
+    }
+  }
+
   public static class LATERATOR {
 
     public static final SparkBaseConfig MOTOR_CONFIG = new SparkMaxConfig()
@@ -135,7 +189,7 @@ public final class Constants {
         .pidf(MOTOR_P, MOTOR_I, MOTOR_D, MOTOR_FF)
         .outputRange(-1, 1);
 
-    public static final Angle MAX_ALLOWED_ERROR = Units.Degrees.of(15);
+    public static final Angle MAX_ALLOWED_ERROR = Units.Rotations.of(.5);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
@@ -148,14 +202,18 @@ public final class Constants {
 
     public static class SETPOINT {
 
-      public static final Distance L4 = Units.Feet.of(0);
-      public static final Distance L3 = Units.Feet.of(0);
-      public static final Distance L2 = Units.Feet.of(0);
-      public static final Distance L1 = Units.Feet.of(0);
-
-      public static final Distance INTAKE = Units.Feet.of(0);
-      public static final Distance GROUND = Units.Feet.of(0);
-      public static final Distance TRAVEL = Units.Feet.of(0);
+      public static final Distance INTAKE = Units.Inches.of(3);
+      public static final Distance HOME = Units.Inches.of(1);
+      public static final Distance MAX_SAFE_SCORING_EXTENSION = Units.Inches.of(
+        -1
+      );
+      public static final Distance L1 = Units.Inches.of(-2);
+      public static final Distance L2 = Units.Inches.of(-6.1);
+      public static final Distance L3 = Units.Inches.of(-6.1);
+      public static final Distance L4 = Units.Inches.of(-6.25);
+      public static final Distance FULL_SCORING_EXTENSION = Units.Inches.of(
+        -6.6
+      );
     }
   }
 }

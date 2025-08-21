@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.SENSOR_PERIODIC;
+import frc.robot.commands.Elevator.ElevatorHold;
 import frc.robot.commands.drive.DefaultDrive;
 import frc.robot.controls.CoDriverControls;
 import frc.robot.controls.DriverControls;
@@ -17,6 +18,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.AlgaeKnocker;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.CoralRunner;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Laterator;
 
 /**
@@ -30,14 +32,15 @@ public class Robot extends TimedRobot {
 
   private Command m_autonomousCommand;
   private static Command m_defaultDrive;
+  private static Command m_elevatorHold;
 
   public static CommandSwerveDrivetrain swerve;
 
   private static DriverControls driverControls;
-  private static CoDriverControls CodriverControls;
-
+  public static CoDriverControls codriverControls;
   public static CoralRunner coralRunner;
   public static AlgaeKnocker algaeKnocker;
+  public static Elevator elevator;
   public static Laterator laterator;
 
   private final Telemetry logger = new Telemetry(
@@ -53,10 +56,13 @@ public class Robot extends TimedRobot {
     swerve = TunerConstants.createDrivetrain();
     coralRunner = new CoralRunner();
     algaeKnocker = new AlgaeKnocker();
+    elevator = new Elevator();
     laterator = new Laterator();
 
     driverControls = new DriverControls();
-    CodriverControls = new CoDriverControls();
+    codriverControls = new CoDriverControls();
+
+    m_elevatorHold = new ElevatorHold();
 
     m_defaultDrive = new DefaultDrive(
       driverControls::getLeftX,
@@ -74,8 +80,10 @@ public class Robot extends TimedRobot {
     );
 
     // TODO: add alliance-dependent pose reset on roborio startup
-    Robot.swerve.setDefaultCommand(m_defaultDrive);
 
+    Robot.elevator.setDefaultCommand(m_elevatorHold);
+
+    Robot.swerve.setDefaultCommand(m_defaultDrive);
     Robot.swerve.registerTelemetry(logger::telemeterize);
   }
 

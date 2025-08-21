@@ -3,12 +3,17 @@ package frc.robot.controls;
 import static edu.wpi.first.units.Units.Percent;
 
 import edu.wpi.first.units.measure.Dimensionless;
+import edu.wpi.first.units.measure.MutDimensionless;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
+import frc.robot.Constants.ELEVATOR;
 import frc.robot.Robot;
+import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
+import frc.robot.commands.Elevator.ElevatorAxis;
+import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
 import frc.robot.commands.laterator.LateratorSetDistance;
@@ -17,6 +22,10 @@ import frc.robot.controls.util.RumbleInterface;
 public class CoDriverControls implements RumbleInterface {
 
   private CommandXboxController m_controller;
+
+  private MutDimensionless m_rightTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftTrigger = Percent.mutable(0);
+  private MutDimensionless m_leftY = Percent.mutable(0);
 
   public CoDriverControls() {
     m_controller = new CommandXboxController(
@@ -33,17 +42,30 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .x()
       .and(m_controller.povUp())
-      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3));
+      .onTrue(
+        new LateratorSetDistance(Constants.LATERATOR.SETPOINT.INTAKE).andThen(
+          new ElevatorSetDistance(ELEVATOR.SETPOINT.INTAKE)
+        )
+      );
 
     m_controller
       .x()
       .and(m_controller.povRight())
-      .onTrue(new InstantCommand(() -> Robot.laterator.setZero()));
+      .onTrue(
+        new InstantCommand(() -> {
+          Robot.laterator.setZero();
+          Robot.elevator.setZero();
+        })
+      );
 
     m_controller
       .x()
       .and(m_controller.povDown())
-      .onTrue(new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L2));
+      .onTrue(
+        new LateratorSetDistance(Constants.LATERATOR.SETPOINT.L3).andThen(
+          new ElevatorSetDistance(ELEVATOR.SETPOINT.L3)
+        )
+      );
     m_controller
       .rightTrigger()
       .onTrue(new CoralRunnerAxis(this::getRightTriggerAxis));
@@ -51,6 +73,19 @@ public class CoDriverControls implements RumbleInterface {
     m_controller
       .leftTrigger()
       .onTrue(new CoralRunnerAxis(this::getLeftTriggerAxis));
+
+    m_controller.x().whileTrue(new ElevatorAxis(this::getLeftY));
+
+    m_controller
+      .b()
+      .onTrue(
+        new InstantCommand(() -> {
+          Robot.elevator.setZero();
+        })
+      );
+    m_controller
+      .y()
+      .whileTrue(new AlgaeKnockerSpeed(Constants.ALGAE_KNOCKER.DE_ALGAE_SPEED));
   }
 
   public Dimensionless getRightX() {
@@ -62,15 +97,21 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   public Dimensionless getLeftY() {
-    return Percent.of(modifyAxis(m_controller.getLeftY()));
+    return m_rightTrigger.mut_replace(-m_controller.getLeftY(), Percent);
   }
 
   public Dimensionless getRightTriggerAxis() {
-    return Percent.of(-m_controller.getRightTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      -m_controller.getRightTriggerAxis(),
+      Percent
+    );
   }
 
   public Dimensionless getLeftTriggerAxis() {
-    return Percent.of(m_controller.getLeftTriggerAxis());
+    return m_rightTrigger.mut_replace(
+      m_controller.getLeftTriggerAxis(),
+      Percent
+    );
   }
 
   private double deadband(double value, double deadband) {
@@ -86,7 +127,7 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   private double modifyAxis(double value) {
-    value = deadband(value, CONTROLLER.CODRIVE_CONTROLLER_DEADBAND);
+    value = deadband(value, CONTROLLER.CODRIVER_CONTROLLER_DEADBAND);
     value = Math.copySign(
       Math.pow(value, Constants.CONTROLLER.JOYSTICK_RAMP_EXPONENT),
       value
