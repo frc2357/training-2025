@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
   public static CommandSwerveDrivetrain swerve;
 
-  private static DriverControls driverControls;
+  public static DriverControls driverControls;
   public static CoDriverControls codriverControls;
   public static CoralRunner coralRunner;
   public static AlgaeKnocker algaeKnocker;

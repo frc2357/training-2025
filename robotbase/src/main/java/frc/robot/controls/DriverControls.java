@@ -10,6 +10,9 @@ import frc.robot.Constants;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
 import frc.robot.commands.Elevator.ElevatorSetDistance;
+import frc.robot.commands.Scoring.Pose_L2;
+import frc.robot.commands.Scoring.Pose_L3;
+import frc.robot.commands.Scoring.ScoreAndReturn;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.controls.util.RumbleInterface;
@@ -42,15 +45,13 @@ public class DriverControls implements RumbleInterface {
     m_controller
       .a()
       .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L1));
-    m_controller
-      .b()
-      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L2));
-    m_controller
-      .x()
-      .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L3));
+    m_controller.b().onTrue(new Pose_L2());
+    m_controller.x().onTrue(new Pose_L3());
     m_controller
       .y()
       .onTrue(new ElevatorSetDistance(Constants.ELEVATOR.SETPOINT.L4));
+
+    m_controller.rightTrigger().onTrue(new ScoreAndReturn());
   }
 
   public Dimensionless getRightX() {

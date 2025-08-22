@@ -99,6 +99,10 @@ public final class Constants {
       .smartCurrentLimit(40, 40);
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+    public static final Dimensionless INTAKE_SPEED = Units.Percent.of(25);
+
+    public static final Dimensionless SCORING_SPEED = Units.Percent.of(25);
+    public static final Time SCORING_RUN_TIME = Units.Seconds.of(.5);
   }
 
   public static class SENSOR_PERIODIC {
@@ -142,7 +146,7 @@ public final class Constants {
     public static final double MOTOR_KG = 0.67;
     public static final double MOTOR_KV = 0.1;
 
-    public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.5);
+    public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.75);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
@@ -163,9 +167,12 @@ public final class Constants {
       public static final Distance L3 = Units.Inches.of(24.189);
       public static final Distance L4 = Units.Inches.of(49.5);
 
-      public static final Distance INTAKE = Units.Feet.of(0); //TODO: Define;
-      public static final Distance GROUND = Units.Feet.of(0); //TODO: Define;
-      public static final Distance TRAVEL = Units.Feet.of(0); //TODO: Define;
+      public static final Distance GROUND = Units.Feet.of(0);
+      public static final Distance HOME = Units.Inches.of(2);
+
+      public static final Distance INTAKE = Units.Inches.of(1.1);
+      public static final Distance LOW_ALGAE = Units.Inches.of(0.5);
+      public static final Distance HIGH_ALGAE = Units.Inches.of(13);
     }
   }
 
