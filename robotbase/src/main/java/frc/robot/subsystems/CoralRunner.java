@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Value;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -49,6 +49,7 @@ public class CoralRunner extends SubsystemBase {
       Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS.in(Seconds),
       DebounceType.kBoth
     );
+
     m_debouncer_Outtake = new Debouncer(
       Constants.CORAL_RUNNER.DEBOUNCE_TIME_SECONDS.in(Seconds),
       DebounceType.kBoth
@@ -59,11 +60,11 @@ public class CoralRunner extends SubsystemBase {
     Dimensionless speed = axisSpeed.times(
       Constants.CORAL_RUNNER.AXIS_MAX_SPEED
     );
-    m_motor.set(speed.in(Percent));
+    m_motor.set(speed.in(Value));
   }
 
   public void setSpeed(Dimensionless speed) {
-    m_motor.set(speed.in(Percent));
+    m_motor.set(speed.in(Value));
   }
 
   public boolean isIntakeBeamBroken() {
