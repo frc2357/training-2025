@@ -78,9 +78,9 @@ public final class Constants {
       TunerConstants.kSpeedAt12Volts;
 
     public static final Dimensionless AXIS_MAX_ANGULAR_RATE = Units.Percent.of(
-      50
+      25
     );
-    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
   }
 
   public static class DIGITAL_INPUT {
@@ -98,10 +98,13 @@ public final class Constants {
       .voltageCompensation(12)
       .smartCurrentLimit(40, 40);
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
-    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
-    public static final Dimensionless INTAKE_SPEED = Units.Percent.of(25);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Milliseconds.of(10);
 
-    public static final Dimensionless SCORING_SPEED = Units.Percent.of(25);
+    public static final Dimensionless INTAKE_SPEED = Units.Percent.of(-50);
+    public static final Dimensionless INTAKE_SPEED_SLOW = Units.Percent.of(-15);
+    public static final Time INTAKE_SETTLE_TIME = Units.Seconds.of(.5);
+
+    public static final Dimensionless SCORING_SPEED = Units.Percent.of(-75);
     public static final Time SCORING_RUN_TIME = Units.Seconds.of(.5);
   }
 
@@ -149,7 +152,7 @@ public final class Constants {
     public static final Distance MAX_ALLOWED_ERROR = Units.Inches.of(.75);
 
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
-    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Milliseconds.of(15);
 
     public static final double GEAR_RATIO = (38.0 / 14.0) * 2.0;
 
@@ -198,14 +201,16 @@ public final class Constants {
 
     public static final Angle MAX_ALLOWED_ERROR = Units.Rotations.of(.5);
 
-    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(25);
-    public static final Time DEBOUNCE_TIME_SECONDS = Units.Seconds.of(.03);
+    public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
+    public static final Time DEBOUNCE_TIME_SECONDS = Units.Milliseconds.of(10);
 
     public static final double GEAR_RATIO = 15;
     public static final Distance OUTPUT_PULLEY_PITCH_DIAMETER =
       Units.Millimeters.of(46.188);
     public static final Distance OUTPUT_PULLEY_CIRCUMFERENCE =
       OUTPUT_PULLEY_PITCH_DIAMETER.times(Math.PI);
+
+    public static final Dimensionless ZERO_SPEED = Units.Percent.of(-25);
 
     public static class SETPOINT {
 

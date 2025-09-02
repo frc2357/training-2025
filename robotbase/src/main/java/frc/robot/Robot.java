@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.SENSOR_PERIODIC;
 import frc.robot.commands.Elevator.ElevatorHold;
 import frc.robot.commands.drive.DefaultDrive;
@@ -80,9 +81,6 @@ public class Robot extends TimedRobot {
     );
 
     // TODO: add alliance-dependent pose reset on roborio startup
-
-    Robot.elevator.setDefaultCommand(m_elevatorHold);
-
     Robot.swerve.setDefaultCommand(m_defaultDrive);
     Robot.swerve.registerTelemetry(logger::telemeterize);
   }
@@ -133,6 +131,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    new InstantCommand(() -> {
+      Robot.laterator.setZero();
+      Robot.elevator.setZero();
+    });
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }

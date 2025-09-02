@@ -1,6 +1,7 @@
 package frc.robot.controls;
 
 import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Value;
 
 import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.MutDimensionless;
@@ -17,6 +18,8 @@ import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.coralRunner.CoralRunnerAxis;
 import frc.robot.commands.laterator.LateratorAxis;
 import frc.robot.commands.laterator.LateratorSetDistance;
+import frc.robot.commands.laterator.LateratorSetSpeed;
+import frc.robot.commands.laterator.LateratorZero;
 import frc.robot.controls.util.RumbleInterface;
 
 public class CoDriverControls implements RumbleInterface {
@@ -47,6 +50,10 @@ public class CoDriverControls implements RumbleInterface {
           new ElevatorSetDistance(ELEVATOR.SETPOINT.INTAKE)
         )
       );
+    m_controller
+      .a()
+      .onTrue(new LateratorSetSpeed(Constants.LATERATOR.ZERO_SPEED.times(-1)))
+      .onFalse(new LateratorZero());
 
     m_controller
       .x()
@@ -89,29 +96,26 @@ public class CoDriverControls implements RumbleInterface {
   }
 
   public Dimensionless getRightX() {
-    return Percent.of(modifyAxis(m_controller.getRightX()));
+    return Value.of(modifyAxis(m_controller.getRightX()));
   }
 
   public Dimensionless getLeftX() {
-    return Percent.of(modifyAxis(m_controller.getLeftX()));
+    return Value.of(modifyAxis(m_controller.getLeftX()));
   }
 
   public Dimensionless getLeftY() {
-    return m_rightTrigger.mut_replace(-m_controller.getLeftY(), Percent);
+    return m_rightTrigger.mut_replace(-m_controller.getLeftY(), Value);
   }
 
   public Dimensionless getRightTriggerAxis() {
     return m_rightTrigger.mut_replace(
       -m_controller.getRightTriggerAxis(),
-      Percent
+      Value
     );
   }
 
   public Dimensionless getLeftTriggerAxis() {
-    return m_rightTrigger.mut_replace(
-      m_controller.getLeftTriggerAxis(),
-      Percent
-    );
+    return m_rightTrigger.mut_replace(m_controller.getLeftTriggerAxis(), Value);
   }
 
   private double deadband(double value, double deadband) {

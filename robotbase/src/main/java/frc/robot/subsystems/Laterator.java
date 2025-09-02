@@ -1,9 +1,9 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Millisecond;
-import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Value;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Dimensionless;
@@ -62,18 +63,19 @@ public class Laterator extends SubsystemBase {
       Constants.DIGITAL_INPUT.LATERATOR_HALL_EFFECT_ID
     );
     m_debouncer = new Debouncer(
-      Constants.LATERATOR.DEBOUNCE_TIME_SECONDS.in(Millisecond)
+      Constants.LATERATOR.DEBOUNCE_TIME_SECONDS.in(Seconds),
+      DebounceType.kBoth
     );
   }
 
   public void setSpeed(Dimensionless speed) {
     m_targetRotations.mut_replace(Double.NaN, Rotations);
-    m_motor.set(speed.in(Percent));
+    m_motor.set(speed.in(Value));
   }
 
   public void setAxisSpeed(Dimensionless axisSpeed) {
     m_targetRotations.mut_replace(Double.NaN, Rotations);
-    m_motor.set(axisSpeed.times(LATERATOR.AXIS_MAX_SPEED).in(Percent));
+    m_motor.set(axisSpeed.times(LATERATOR.AXIS_MAX_SPEED).in(Value));
   }
 
   public void updateMotor() {
@@ -112,7 +114,7 @@ public class Laterator extends SubsystemBase {
   }
 
   public Boolean isAtZero() {
-    return m_isHallEffectTriggered;
+    return !m_isHallEffectTriggered;
   }
 
   public void setZero() {
@@ -141,5 +143,6 @@ public class Laterator extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Rotations", getRotations().in(Rotations));
     SmartDashboard.putNumber("Distance", getDistance().in(Inches));
+    SmartDashboard.putBoolean("isLateratorHallEffect", isAtZero());
   }
 }
