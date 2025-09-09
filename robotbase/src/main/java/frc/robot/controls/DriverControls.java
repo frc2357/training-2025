@@ -14,10 +14,10 @@ import frc.robot.Robot;
 import frc.robot.commands.DeAlgae.DeAlgae_L2;
 import frc.robot.commands.DeAlgae.DeAlgae_L3;
 import frc.robot.commands.IntakeAndScoring.IntakeScoreComboCommand;
-import frc.robot.commands.Posing.Pose_Home;
-import frc.robot.commands.Posing.Pose_L2;
-import frc.robot.commands.Posing.Pose_L3;
-import frc.robot.commands.Posing.Pose_L4;
+import frc.robot.commands.Manipulator_Posing.Manipulator_Pose_Home;
+import frc.robot.commands.Manipulator_Posing.Manipulator_Pose_L2;
+import frc.robot.commands.Manipulator_Posing.Manipulator_Pose_L3;
+import frc.robot.commands.Manipulator_Posing.Manipulator_Pose_L4;
 import frc.robot.commands.drive.FlipPerspective;
 import frc.robot.commands.laterator.LateratorSetSpeed;
 import frc.robot.commands.laterator.LateratorZero;
@@ -41,7 +41,7 @@ public class DriverControls implements RumbleInterface {
     m_controller.back().onTrue(new FlipPerspective());
 
     m_controller.leftTrigger().onTrue(new IntakeScoreComboCommand());
-    m_controller.leftBumper().onTrue((new Pose_Home()));
+    m_controller.leftBumper().onTrue((new Manipulator_Pose_Home()));
 
     m_controller.rightTrigger().onTrue(new DeAlgae_L2());
     m_controller.rightBumper().onTrue(new DeAlgae_L3());
@@ -58,9 +58,9 @@ public class DriverControls implements RumbleInterface {
           )
       );
 
-    m_controller.b().onTrue(new Pose_L2());
-    m_controller.x().onTrue(new Pose_L3());
-    m_controller.y().onTrue(new Pose_L4());
+    m_controller.b().onTrue(new Manipulator_Pose_L2());
+    m_controller.x().onTrue(new Manipulator_Pose_L3());
+    m_controller.y().onTrue(new Manipulator_Pose_L4());
   }
 
   public Dimensionless getRightX() {

@@ -1,4 +1,4 @@
-package frc.robot.commands.Posing;
+package frc.robot.commands.Manipulator_Posing;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -9,9 +9,9 @@ import frc.robot.Robot;
 import frc.robot.commands.Elevator.ElevatorSetDistance;
 import frc.robot.commands.laterator.LateratorSetDistance;
 
-public class Pose_L3 extends SequentialCommandGroup {
+public class Manipulator_Pose_L3 extends SequentialCommandGroup {
 
-  public Pose_L3() {
+  public Manipulator_Pose_L3() {
     super(
       new LateratorSetDistance(LATERATOR.SETPOINT.HOME).until(
         Robot.laterator::isAtTarget

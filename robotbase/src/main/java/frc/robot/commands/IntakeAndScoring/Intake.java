@@ -9,7 +9,7 @@ import frc.robot.Constants.ELEVATOR;
 import frc.robot.Constants.LATERATOR;
 import frc.robot.Robot;
 import frc.robot.commands.Elevator.ElevatorSetDistance;
-import frc.robot.commands.Posing.Pose_Home;
+import frc.robot.commands.Manipulator_Posing.Manipulator_Pose_Home;
 import frc.robot.commands.coralRunner.CoralRunnerSetSpeed;
 import frc.robot.commands.laterator.LateratorSetDistance;
 
@@ -28,7 +28,7 @@ public class Intake extends SequentialCommandGroup {
           .beforeStarting(new WaitUntilCommand(Robot.elevator::isAtTarget))
       ),
       new ParallelCommandGroup(
-        new Pose_Home(),
+        new Manipulator_Pose_Home(),
         new SequentialCommandGroup(
           new CoralRunnerSetSpeed(CORAL_RUNNER.INTAKE_SPEED_SLOW).until(
             Robot.coralRunner::isOuttakeBeamBroken
