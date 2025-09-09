@@ -9,12 +9,11 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.Constants.ALGAE_KNOCKER;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.Robot;
-import frc.robot.commands.AlgaeKnocker.AlgaeKnockerSpeed;
-import frc.robot.commands.IntakeAndScoring.Intake;
-import frc.robot.commands.IntakeAndScoring.ScoreAndReturn;
+import frc.robot.commands.DeAlgae.DeAlgae_L2;
+import frc.robot.commands.DeAlgae.DeAlgae_L3;
+import frc.robot.commands.IntakeAndScoring.IntakeScoreComboCommand;
 import frc.robot.commands.Posing.Pose_Home;
 import frc.robot.commands.Posing.Pose_L2;
 import frc.robot.commands.Posing.Pose_L3;
@@ -41,13 +40,11 @@ public class DriverControls implements RumbleInterface {
       .onTrue(Robot.swerve.runOnce(() -> Robot.swerve.seedFieldCentric()));
     m_controller.back().onTrue(new FlipPerspective());
 
-    m_controller.rightTrigger().onTrue(new ScoreAndReturn());
-
-    m_controller.leftTrigger().onTrue(new Intake());
+    m_controller.leftTrigger().onTrue(new IntakeScoreComboCommand());
     m_controller.leftBumper().onTrue((new Pose_Home()));
-    m_controller
-      .rightBumper()
-      .whileTrue((new AlgaeKnockerSpeed(ALGAE_KNOCKER.DE_ALGAE_SPEED)));
+
+    m_controller.rightTrigger().onTrue(new DeAlgae_L2());
+    m_controller.rightBumper().onTrue(new DeAlgae_L3());
 
     m_controller
       .a()

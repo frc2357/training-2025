@@ -84,6 +84,10 @@ public class CoralRunner extends SubsystemBase {
     );
   }
 
+  public boolean hasCoral() {
+    return isIntakeBeamBroken() || isOuttakeBeamBroken();
+  }
+
   public void stop() {
     m_motor.stopMotor();
   }
