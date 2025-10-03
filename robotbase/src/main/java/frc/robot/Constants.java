@@ -201,6 +201,8 @@ public final class Constants {
 
     public static final Angle MAX_ALLOWED_ERROR = Units.Rotations.of(.5);
 
+    public static final AngularVelocity MAX_ALLOWED_ERROR_RPM = Units.RPM.of(2);
+
     public static final Dimensionless AXIS_MAX_SPEED = Units.Percent.of(50);
     public static final Time DEBOUNCE_TIME_SECONDS = Units.Milliseconds.of(10);
 

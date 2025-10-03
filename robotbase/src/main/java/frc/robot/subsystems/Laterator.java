@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Value;
@@ -97,8 +98,14 @@ public class Laterator extends SubsystemBase {
   }
 
   public boolean isAtTarget() {
-    return getRotations()
-      .isNear(m_targetRotations, Constants.LATERATOR.MAX_ALLOWED_ERROR);
+    return (
+      getRotations()
+        .isNear(m_targetRotations, Constants.LATERATOR.MAX_ALLOWED_ERROR) &&
+      RPM.of(m_encoder.getVelocity()).isNear(
+        RPM.of(0),
+        Constants.LATERATOR.MAX_ALLOWED_ERROR_RPM
+      )
+    );
   }
 
   public void setTargetDistance(Distance targetDistance) {
