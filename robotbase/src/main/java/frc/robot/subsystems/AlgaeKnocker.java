@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Value;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -27,7 +27,7 @@ public class AlgaeKnocker extends SubsystemBase {
   }
 
   public void setSpeed(Dimensionless speed) {
-    m_motor.set(speed.in(Percent));
+    m_motor.set(speed.in(Value));
   }
 
   public void stop() {

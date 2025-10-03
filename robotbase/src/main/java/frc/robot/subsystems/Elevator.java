@@ -1,8 +1,8 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Value;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.RelativeEncoder;
@@ -81,7 +81,7 @@ public class Elevator extends SubsystemBase {
 
   public void setAxisSpeed(Dimensionless axisSpeed) {
     m_targetRotations.mut_replace(Double.NaN, Rotations);
-    m_left_Motor.set(axisSpeed.times(ELEVATOR.AXIS_MAX_SPEED).in(Percent));
+    m_left_Motor.set(axisSpeed.times(ELEVATOR.AXIS_MAX_SPEED).in(Value));
   }
 
   public void updateMotorPIDs() {

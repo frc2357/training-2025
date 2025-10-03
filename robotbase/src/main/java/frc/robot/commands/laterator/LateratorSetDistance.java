@@ -27,11 +27,11 @@ public class LateratorSetDistance extends Command {
 
   @Override
   public boolean isFinished() {
-    return Robot.laterator.isAtTarget();
+    return false;
   }
 
   @Override
-  public void end(boolean interrupted) {
-    Robot.laterator.stop();
+  public void end(boolean isInterrupted) {
+    Robot.elevator.stop();
   }
 }

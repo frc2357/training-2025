@@ -1,6 +1,6 @@
 package frc.robot.commands.drive;
 
-import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Value;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Dimensionless;
@@ -29,19 +29,19 @@ public class DefaultDrive extends Command {
   @Override
   public void execute() {
     if (
-      m_x.get().in(Percent) == 0 &&
-      m_y.get().in(Percent) == 0 &&
-      m_rotation.get().in(Percent) == 0
+      m_x.get().in(Value) == 0 &&
+      m_y.get().in(Value) == 0 &&
+      m_rotation.get().in(Value) == 0
     ) {
       Robot.swerve.stopMotors();
     } else {
       Robot.swerve.driveFieldRelative(
-        m_y.get().times(Constants.SWERVE.AXIS_MAX_SPEED).in(Units.Percent),
-        m_x.get().times(Constants.SWERVE.AXIS_MAX_SPEED).in(Units.Percent),
+        m_y.get().times(Constants.SWERVE.AXIS_MAX_SPEED).in(Units.Value),
+        m_x.get().times(Constants.SWERVE.AXIS_MAX_SPEED).in(Units.Value),
         -m_rotation
           .get()
           .times(Constants.SWERVE.AXIS_MAX_ANGULAR_RATE)
-          .in(Units.Percent)
+          .in(Units.Value)
       );
     }
   }

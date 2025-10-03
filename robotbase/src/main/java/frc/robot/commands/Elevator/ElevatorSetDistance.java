@@ -27,11 +27,11 @@ public class ElevatorSetDistance extends Command {
 
   @Override
   public boolean isFinished() {
-    return Robot.elevator.isAtTarget();
+    return false;
   }
 
   @Override
-  public void end(boolean interrupted) {
+  public void end(boolean isInterrupted) {
     Robot.elevator.stop();
   }
 }
