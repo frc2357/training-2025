@@ -13,12 +13,13 @@ public class DriveDistance extends Command {
   private final double m_speed;
 
   /**
-   * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
+   * Creates a new DriveDistance. This command will drive your your robot for a
+   * desired distance at
    * a desired speed.
    *
-   * @param speed The speed at which the robot will drive
+   * @param speed  The speed at which the robot will drive
    * @param inches The number of inches the robot will drive
-   * @param drive The drivetrain subsystem on which this command will run
+   * @param drive  The drivetrain subsystem on which this command will run
    */
   public DriveDistance(double speed, double inches, Drivetrain drive) {
     m_distance = inches;

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
+
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,10 +16,11 @@ public class DriveStop extends Command {
   private long m_startTime;
 
   /**
-   * Creates a new DriveStop. This command will drive your robot for a desired speed and time.
+   * Creates a new DriveStop. This command will drive your robot for a desired
+   * speed and time.
    *
    * @param speed The speed which the robot will drive. Negative is in reverse.
-   * @param time How much time to drive in seconds
+   * @param time  How much time to drive in seconds
    * @param drive The drivetrain subsystem on which this command will run
    */
   public DriveStop(double speed, double time, Drivetrain drive) {
@@ -53,4 +55,3 @@ public class DriveStop extends Command {
     return (System.currentTimeMillis() - m_startTime) >= m_duration;
   }
 }
-

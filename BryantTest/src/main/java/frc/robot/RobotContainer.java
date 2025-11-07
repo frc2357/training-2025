@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
-import frc.robot.commands.DriveTime;
-import frc.robot.commands.GroupCommand;
+//import frc.robot.commands.StopAtDistance;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.LineFollower;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.xrp.XRPOnBoardIO;
@@ -24,9 +24,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -41,16 +44,20 @@ public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private final SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+   * it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
@@ -68,7 +75,6 @@ public class RobotContainer {
     joystickAButton
         .onTrue(new InstantCommand(() -> m_arm.setAngle(45.0), m_arm))
         .onFalse(new InstantCommand(() -> m_arm.setAngle(0.0), m_arm));
-
     JoystickButton joystickBButton = new JoystickButton(m_controller, 2);
     joystickBButton
         .onTrue(new InstantCommand(() -> m_arm.setAngle(90.0), m_arm))
@@ -85,16 +91,14 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-public Command getAutonomousCommand() {
-  return new GroupCommand(m_drivetrain);
+  public Command getAutonomousCommand() {
+    return new LineFollower(m_drivetrain);
 
-  
- }
-
+  }
 
   /**
    * Use this to pass the teleop command to the main {@link Robot} class.
-  
+   * 
    * @return the command to run in teleop
    */
   public Command getArcadeDriveCommand() {
@@ -102,4 +106,3 @@ public Command getAutonomousCommand() {
         m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(0));
   }
 }
-

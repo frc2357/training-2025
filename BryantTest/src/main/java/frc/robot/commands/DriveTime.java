@@ -15,10 +15,11 @@ public class DriveTime extends Command {
   private final double m_turn;
 
   /**
-   * Creates a new DriveTime. This command will drive your robot for a desired speed and time.
+   * Creates a new DriveTime. This command will drive your robot for a desired
+   * speed and time.
    *
    * @param speed The speed which the robot will drive. Negative is in reverse.
-   * @param time How much time to drive in seconds
+   * @param time  How much time to drive in seconds
    * @param drive The drivetrain subsystem on which this command will run
    */
   public DriveTime(double speed, double time, double turn, Drivetrain drive) {
@@ -39,7 +40,7 @@ public class DriveTime extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(m_speed, m_turn );
+    m_drive.arcadeDrive(m_speed, m_turn);
   }
 
   // Called once the command ends or is interrupted.
@@ -54,4 +55,3 @@ public class DriveTime extends Command {
     return (System.currentTimeMillis() - m_startTime) >= m_duration;
   }
 }
-
